@@ -27,7 +27,11 @@ public abstract class Mathematics {
         return b + 0.337 * a;
     }
 
+    public static double normaliseAngle(double angle) {
+        return angle % Math.PI * 2;
+    }
+
     public static void main(String args[]) {
-        System.out.println(hypotenuse(20, 33));
+        System.out.println(normaliseAngle(-6.30));
     }
 }
