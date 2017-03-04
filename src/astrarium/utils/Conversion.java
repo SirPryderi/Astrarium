@@ -8,10 +8,10 @@ package astrarium.utils;
  */
 abstract public class Conversion {
     public static double degToRad(double d) {
-        return d * 0.0174533;
+        return Math.toRadians(d);
     }
 
     public static double radToDeg(double d) {
-        return d * 57.2958;
+        return Math.toDegrees(d);
     }
 }
