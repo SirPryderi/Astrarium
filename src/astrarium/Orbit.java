@@ -194,7 +194,7 @@ public final class Orbit {
     }
 
     public double getTangentVector() {
-        return getTangentVector0();
+        return getVelocityAngle();
     }
 
     public double getTangentVector0() {
@@ -238,7 +238,7 @@ public final class Orbit {
     }
 
     public double getTangentVector2() {
-        return -Math.atan2(getSemiMajorAxis() * Math.tan(_eccentricAnomaly), getSemiMinorAxis());
+        return -Math.atan2(getSemiMinorAxis(), getSemiMajorAxis() * Math.tan(_eccentricAnomaly));
     }
 
     public double getTangentVector3() {
@@ -248,7 +248,7 @@ public final class Orbit {
 //        System.out.println("Theta: " + Conversion.radToDeg(theta) + " deg");
 
         // https://en.wikipedia.org/wiki/Ellipse#General_parametric_form
-        return -Math.atan2(Math.tan(theta), 1 - (eccentricity * eccentricity));
+        return -Math.atan2(1 - (eccentricity * eccentricity), Math.tan(theta));
     }
     //endregion Angles
 
@@ -308,6 +308,12 @@ public final class Orbit {
                 // TODO Check if correct
                 return Math.atan2(eccentricity * Math.sin(theta), 1 + Math.cos(theta));
         }
+    }
+
+    public double getVelocityAngle() {
+        double trueAnomaly = getTrueAnomaly();
+
+        return trueAnomaly + Math.PI / 2 + getVelocityAngle(trueAnomaly);
     }
 
     /**
@@ -409,6 +415,10 @@ public final class Orbit {
         double x = Math.sqrt(1 + eccentricity) * Math.sin(eccentricAnomaly / 2);
 
         return 2 * Math.atan2(y, x);
+    }
+
+    public double getTrueAnomaly() {
+        return Math.atan2(getPosition().getY(), getPosition().getX());
     }
     //endregion
 
