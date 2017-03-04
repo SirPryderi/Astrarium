@@ -90,23 +90,17 @@ public final class Orbit {
 
         eccentricAnomaly = meanAnomaly;
 
-//        if (eccentricity < 0.8)
-//            eccentricAnomaly = meanAnomaly;
-//        else
-//            eccentricAnomaly = Math.PI;
-
         zero = eccentricAnomaly - eccentricity * Math.sin(meanAnomaly) - meanAnomaly;
-
-        // meanAnomaly = 2* meanAnomaly - Mathematics.floor(meanAnomaly);
 
         // Evil loop here
         for (int i = 0; (Math.abs(zero) > delta) && (i < MAX_ITERATIONS); i++) {
-            // TODO Fix possible division by zero
+            // TODO Fix possible division by zero.
             eccentricAnomaly = eccentricAnomaly - zero / (1 - eccentricity * Math.cos(eccentricAnomaly));
             zero = eccentricAnomaly - eccentricity * Math.sin(eccentricAnomaly) - meanAnomaly;
         }
 
-        return Mathematics.normaliseAngle(eccentricAnomaly);
+        // TODO This value should be normalised.
+        return eccentricAnomaly;
     }
     //endregion calculateEccentricAnomaly
 
@@ -287,6 +281,10 @@ public final class Orbit {
 
     public double getVelocityAtAngle(double theta) {
         return getVelocityAtRadius(getRadius(theta));
+    }
+
+    public double getVelocity() {
+        return getVelocityAtRadius(getPosition().getMagnitude());
     }
 
     @Deprecated
