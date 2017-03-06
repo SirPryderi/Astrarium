@@ -48,7 +48,7 @@ public abstract class Body {
 
     public Position getRelativePosition(long time) {
         if (getOrbit() != null) {
-            return getOrbit().getPosition(time);
+            return getOrbit().getPositionFromParent(time);
         } else {
             return new Position(0, 0);
         }
@@ -56,7 +56,7 @@ public abstract class Body {
 
     public Position getRelativePosition() {
         if (getOrbit() != null) {
-            return getOrbit().getPosition();
+            return getOrbit().getRenderedPositionFromParent();
         } else {
             return new Position(0, 0);
         }

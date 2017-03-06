@@ -200,9 +200,9 @@ public final class Orbit {
         double vx = this.getSemiMajorAxis() * Math.sqrt(1D + Math.pow(Math.tan(_eccentricAnomaly), 2D));
 
 
-        if (getPosition().getX() > 0) {
+        if (getRenderedPositionFromParent().getX() > 0) {
 
-        } else if (getPosition().getX() < 0) {
+        } else if (getRenderedPositionFromParent().getX() < 0) {
             vx = -vx;
         } else {
             return _eccentricAnomaly + Math.PI / 2;
@@ -212,16 +212,16 @@ public final class Orbit {
 
         Position vPoint = new Position(vx, 0, 0);
 
-        double v = vPoint.angleOfLineBetweenThisAnd(getPosition());
+        double v = vPoint.angleOfLineBetweenThisAnd(getRenderedPositionFromParent());
 
-        //return getPosition().angleOfLineBetweenThisAnd(vPoint);
+        //return getPositionFromParent().angleOfLineBetweenThisAnd(vPoint);
         //return e;
 
-        if (getPosition().getX() > 0 && getPosition().getY() > 0) {
+        if (getRenderedPositionFromParent().getX() > 0 && getRenderedPositionFromParent().getY() > 0) {
             v += Math.PI;
         }
 
-        if (getPosition().getX() < 0 && getPosition().getY() < 0) {
+        if (getRenderedPositionFromParent().getX() < 0 && getRenderedPositionFromParent().getY() < 0) {
             v += Math.PI;
         }
 
@@ -238,7 +238,7 @@ public final class Orbit {
 
     public double getTangentVector3() {
         Position center = new Position(-getFocusDistance(), 0);
-        double theta = center.angleOfLineBetweenThisAnd(getPosition()) + getLongitudeOfAscendingNode();
+        double theta = center.angleOfLineBetweenThisAnd(_positionFromOrbitalPlane);
 
         // https://en.wikipedia.org/wiki/Ellipse#General_parametric_form
 
@@ -285,7 +285,7 @@ public final class Orbit {
     }
 
     public double getVelocity() {
-        return getVelocityAtRadius(getPosition().getMagnitude());
+        return getVelocityAtRadius(getRenderedPositionFromParent().getMagnitude());
     }
 
     @Deprecated
@@ -429,7 +429,7 @@ public final class Orbit {
     }
 
     public double getTrueAnomaly() {
-        return Math.atan2(getPosition().getY(), getPosition().getX());
+        return Math.atan2(getRenderedPositionFromParent().getY(), getRenderedPositionFromParent().getX());
     }
     //endregion
 
@@ -447,7 +447,7 @@ public final class Orbit {
     //endregion
 
     //region Position
-    public Position getPosition(long time) {
+    public Position getPositionFromParent(long time) {
         return rotatePositionOnOrbitalPlane(
                 getPositionOnOrbitalPlaneFromEccentricAnomaly(
                         calculateEccentricAnomaly(time)
@@ -455,12 +455,16 @@ public final class Orbit {
         );
     }
 
-    public Position getPosition() {
+    public Position getRenderedPositionFromParent() {
         return this._positionFromParent;
     }
 
-    public void setPosition(Position position) {
-        this._positionFromParent = position;
+    public Position getRenderedPositionFromOrbitalPlane() {
+        return this._positionFromOrbitalPlane;
+    }
+
+    public Position getRenderedAbsolutePosition() {
+        return (Position) this.getRenderedPositionFromParent().plus(this.parent.getPosition());
     }
 
     public Position getPositionOnOrbitalPlaneFromEccentricAnomaly(double E) {
@@ -477,6 +481,7 @@ public final class Orbit {
 
     public Position rotatePositionOnOrbitalPlane(Position position) {
         Vector longitudeOfAscendingNodeAxis = new Vector(0, 0, 1);
+
         position.rotate(longitudeOfAscendingNodeAxis, longitudeOfAscendingNode);
         //Vector inclinationAxis = new Vector(Math.cos(longitudeOfAscendingNode), Math.sin(longitudeOfAscendingNode), 0);
         //_positionFromParent.rotate(inclinationAxis, inclination);
@@ -513,7 +518,7 @@ public final class Orbit {
     public void renderAtTime(long time) {
         this._eccentricAnomaly = calculateEccentricAnomaly(time);
         this._positionFromOrbitalPlane = getPositionOnOrbitalPlaneFromEccentricAnomaly(this._eccentricAnomaly);
-        this._positionFromParent = rotatePositionOnOrbitalPlane(this._positionFromOrbitalPlane);
+        this._positionFromParent = rotatePositionOnOrbitalPlane(this._positionFromOrbitalPlane.getCopy());
     }
 
     public enum orbitType {

@@ -8,7 +8,7 @@ package astrarium.utils;
  * @author Vittorio
  */
 public class Position extends Vector {
-    public Position(double x, double y, int z) {
+    public Position(double x, double y, double z) {
         super(x, y, z);
     }
 
@@ -21,5 +21,10 @@ public class Position extends Vector {
             throw new RuntimeException("Function not supported yet. Z must be zero");
 
         return Math.atan2(position.getY() - this.getY(), position.getX() - this.getX());
+    }
+
+    @Override
+    public Position getCopy() {
+        return new Position(this.getX(), this.getY(), this.getZ());
     }
 }
