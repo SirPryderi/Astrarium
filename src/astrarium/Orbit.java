@@ -7,7 +7,7 @@ import astrarium.utils.Vector;
 import static astrarium.utils.Mathematics.acosh;
 
 /**
- * A class that calculates all the required information to compute the _position of something at a given time.
+ * A class that calculates all the required information to compute the _positionFromParent of something at a given time.
  * <p>
  * Created on 03-Nov-16.
  *
@@ -35,7 +35,8 @@ public final class Orbit {
     private CelestialBody ownerBody;
 
     // Values that are rendered and cached
-    private Position _position;
+    private Position _positionFromParent;
+    private Position _positionFromOrbitalPlane;
     private double _eccentricAnomaly;
 
     //region Constructors
@@ -237,7 +238,7 @@ public final class Orbit {
 
     public double getTangentVector3() {
         Position center = new Position(-getFocusDistance(), 0);
-        double theta = center.angleOfLineBetweenThisAnd(getPosition());
+        double theta = center.angleOfLineBetweenThisAnd(getPosition()) + getLongitudeOfAscendingNode();
 
         // https://en.wikipedia.org/wiki/Ellipse#General_parametric_form
 
@@ -447,18 +448,22 @@ public final class Orbit {
 
     //region Position
     public Position getPosition(long time) {
-        return getPositionFromEccentricAnomaly(calculateEccentricAnomaly(time));
+        return rotatePositionOnOrbitalPlane(
+                getPositionOnOrbitalPlaneFromEccentricAnomaly(
+                        calculateEccentricAnomaly(time)
+                )
+        );
     }
 
     public Position getPosition() {
-        return this._position;
+        return this._positionFromParent;
     }
 
     public void setPosition(Position position) {
-        this._position = position;
+        this._positionFromParent = position;
     }
 
-    public Position getPositionFromEccentricAnomaly(double E) {
+    public Position getPositionOnOrbitalPlaneFromEccentricAnomaly(double E) {
         double C = Math.cos(E);
 
         double S = Math.sin(E);
@@ -467,15 +472,15 @@ public final class Orbit {
 
         double y = semiMajorAxis * Math.sqrt(1D - eccentricity * eccentricity) * S;
 
+        return new Position(x, y, 0);
+    }
+
+    public Position rotatePositionOnOrbitalPlane(Position position) {
         Vector longitudeOfAscendingNodeAxis = new Vector(0, 0, 1);
-        Vector inclinationAxis = new Vector(Math.cos(longitudeOfAscendingNode), Math.sin(longitudeOfAscendingNode), 0);
-
-        Position position = new Position(x, y, 0);
-
         position.rotate(longitudeOfAscendingNodeAxis, longitudeOfAscendingNode);
-        //_position.rotate(inclinationAxis, inclination);
+        //Vector inclinationAxis = new Vector(Math.cos(longitudeOfAscendingNode), Math.sin(longitudeOfAscendingNode), 0);
+        //_positionFromParent.rotate(inclinationAxis, inclination);
         // Todo argument of periapsis
-
         return position;
     }
     //endregion Position
@@ -507,7 +512,8 @@ public final class Orbit {
 
     public void renderAtTime(long time) {
         this._eccentricAnomaly = calculateEccentricAnomaly(time);
-        this._position = getPositionFromEccentricAnomaly(this._eccentricAnomaly);
+        this._positionFromOrbitalPlane = getPositionOnOrbitalPlaneFromEccentricAnomaly(this._eccentricAnomaly);
+        this._positionFromParent = rotatePositionOnOrbitalPlane(this._positionFromOrbitalPlane);
     }
 
     public enum orbitType {
