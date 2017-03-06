@@ -253,8 +253,12 @@ public class SpaceCanvas extends Canvas {
 
             this.setCursor(Cursor.CLOSED_HAND);
             offset.setLocation(initialOffset.getX() + (event.getX() - start.getX()), (initialOffset.getY() + event.getY() - start.getY()));
-            this.setOnMouseReleased(event1 -> this.setCursor(Cursor.DEFAULT));
+            this.setOnMouseReleased(event1 -> this.setCursor(Cursor.CROSSHAIR));
         });
+
+        this.setOnMouseEntered(event -> this.setCursor(Cursor.CROSSHAIR));
+
+        this.setOnMouseExited(event -> this.setCursor(Cursor.DEFAULT));
 
         this.setOnScroll(event -> {
             event.consume();

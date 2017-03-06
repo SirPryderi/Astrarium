@@ -34,7 +34,7 @@
     </MenuBar>
 
     <HBox fx:id="gameGrid" VBox.vgrow="ALWAYS">
-        <ScrollPane minWidth="250">
+        <ScrollPane minWidth="250" hbarPolicy="NEVER">
 
             <VBox alignment="TOP_CENTER">
                 <TitledPane text="Time">
