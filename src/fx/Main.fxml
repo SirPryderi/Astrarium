@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import fx.SpaceCanvas?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Text?>
+<VBox xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.76-ea"
+      fx:controller="fx.MainController" minHeight="650" minWidth="650">
+
+    <MenuBar fx:id="menu" HBox.hgrow="ALWAYS">
+        <Menu mnemonicParsing="false" text="File">
+            <MenuItem mnemonicParsing="false" text="Save" accelerator="Shortcut+S"/>
+            <SeparatorMenuItem/>
+            <MenuItem mnemonicParsing="false" text="Open..." accelerator="Shortcut+O" onAction="#loadFile"/>
+            <MenuItem mnemonicParsing="false" text="Save as..." accelerator="Shortcut+Shift+S"/>
+            <SeparatorMenuItem/>
+            <MenuItem mnemonicParsing="false" text="Exit" accelerator="Shortcut+Q"/>
+        </Menu>
+        <Menu text="Edit">
+            <MenuItem text="Add Body..."/>
+            <MenuItem text="Add Spacecraft..."/>
+            <SeparatorMenuItem/>
+            <MenuItem text="Preferences..."/>
+        </Menu>
+        <Menu text="Mission">
+            <MenuItem text="New..." accelerator="Shortcut+N"/>
+        </Menu>
+        <Menu text="View">
+            <CheckMenuItem text="Show orbit" accelerator="ALT+O"/>
+            <CheckMenuItem text="Show names" accelerator="ALT+N"/>
+            <CheckMenuItem text="Show Sphere of Influence" accelerator="ALT+S"/>
+            <CheckMenuItem text="Show Hill Sphere" accelerator="ALT+H"/>
+            <CheckMenuItem text="Show Velocity Vector" accelerator="ALT+V"/>
+        </Menu>
+    </MenuBar>
+
+    <HBox fx:id="gameGrid" VBox.vgrow="ALWAYS">
+        <ScrollPane minWidth="250">
+
+            <VBox alignment="TOP_CENTER">
+                <TitledPane text="Time">
+                    <VBox spacing="5" alignment="TOP_CENTER">
+                        <DatePicker fx:id="datePicker" onAction="#datePickerActionHandler"/>
+
+                        <HBox alignment="CENTER" spacing="5">
+                            <Spinner prefWidth="49" fx:id="hoursField" onMouseClicked="#datePickerActionHandler">
+                                <valueFactory>
+                                    <SpinnerValueFactory.IntegerSpinnerValueFactory min="0" max="23"/>
+                                </valueFactory>
+                            </Spinner>
+                            <Text text=":"/>
+                            <Spinner prefWidth="49" fx:id="minutesField">
+                                <valueFactory>
+                                    <SpinnerValueFactory.IntegerSpinnerValueFactory min="0" max="59"/>
+                                </valueFactory>
+                            </Spinner>
+                            <Text text=":"/>
+                            <Spinner prefWidth="49">
+                                <valueFactory>
+                                    <SpinnerValueFactory.IntegerSpinnerValueFactory min="0" max="59"/>
+                                </valueFactory>
+                            </Spinner>
+                        </HBox>
+                    </VBox>
+                </TitledPane>
+                <TitledPane text="Navigation">
+                    <TreeView prefHeight="300" fx:id="navigationTree"/>
+                </TitledPane>
+                <TitledPane text="Spacecraft">
+                    <TreeView prefHeight="200"/>
+                </TitledPane>
+            </VBox>
+
+        </ScrollPane>
+        <Pane VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS" minWidth="600" minHeight="600">
+            <SpaceCanvas fx:id="canvas"/>
+        </Pane>
+    </HBox>
+
+
+</VBox>
