@@ -3,7 +3,6 @@ package fx;
 import astrarium.Astrarium;
 import astrarium.CelestialBody;
 import astrarium.Orbit;
-import astrarium.transfers.Transferable;
 import astrarium.utils.Conversion;
 import astrarium.utils.Position;
 import javafx.beans.property.BooleanProperty;
@@ -14,8 +13,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.TextAlignment;
 
 import java.awt.geom.Point2D;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * An extension of the standard JavaFX {@link Canvas}, capable of showing an {@link Astrarium} to screen.
@@ -33,7 +30,6 @@ public class SpaceCanvas extends Canvas {
     public BooleanProperty showTangentVector = new SimpleBooleanProperty(false);
     // Astrarium
     private Astrarium astrarium;
-    private List<Transferable> transferables = new ArrayList<>();
     // Visual properties
     private double zoom = 0.5e-9;
     private Point2D offset = new Point2D.Double(0, 0);
@@ -65,15 +61,7 @@ public class SpaceCanvas extends Canvas {
 
         drawPlanet(astrarium.getRoot());
 
-        drawTransfers();
-
         getGraphicsContext2D().restore();
-    }
-
-    private void drawTransfers() {
-        getGraphicsContext2D().setStroke(Color.BLUE);
-
-        transferables.forEach(transferable -> drawOrbit(transferable.getOrbit()));
     }
 
     public void translateToCenter() {
@@ -284,10 +272,6 @@ public class SpaceCanvas extends Canvas {
 
     public void setOffset(Position position) {
         setOffset(position.getX(), position.getY());
-    }
-
-    public void addTransfer(Transferable transferable) {
-        this.transferables.add(transferable);
     }
 
     @Override
