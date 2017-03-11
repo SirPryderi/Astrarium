@@ -32,7 +32,7 @@ public class Vector implements Cloneable {
     public double normalise() {
         double length = getMagnitude();
 
-        this.product(1D / length);
+        this.multiplied(1D / length);
 
         return length;
     }
@@ -69,7 +69,7 @@ public class Vector implements Cloneable {
         this.setValues(norm_final_x, norm_final_y, norm_final_z);
 
         // De-normalise vector
-        this.product(length);
+        this.multiplied(length);
     }
 
     public void rotateWithMatrix(Vector axis, double theta) {
@@ -86,16 +86,20 @@ public class Vector implements Cloneable {
         this.setValues(vector);
 
         // De-normalise vector multiplying by magnitude
-        this.product(length);
+        this.multiplied(length);
     }
     //endregion Rotation
 
     //region Operations
-    public Vector product(double factor) {
+    public Vector multiplied(double factor) {
         this.x *= factor;
         this.y *= factor;
         this.z *= factor;
         return this;
+    }
+
+    public Vector product(double factor) {
+        return new Vector(this.x * factor, this.y * factor, this.z * factor);
     }
 
     public double dotProduct(Vector vector) {
