@@ -102,9 +102,11 @@ public final class Orbit {
     }
     //endregion calculateEccentricAnomaly
 
+    //region Calculate Eccentricity
     public static double calculateEccentricity(double a, double b) {
         return Math.sqrt(1 - (Math.pow(b, 2) / Math.pow(a, 2)));
     }
+    //endregion Calculate Eccentricity
 
     //region Eccentricity
     public double getEccentricity() {
