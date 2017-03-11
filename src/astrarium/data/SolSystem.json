@@ -1,11 +1,11 @@
 {
   "name": "Sun",
-  "mass": 3.0E31,
-  "radius": 2.0E7,
+  "mass": 1.988544E30,
+  "radius": 6.957E8,
   "children": [
     {
       "name": "Mercury",
-      "mass": 3.3020000000000006E23,
+      "mass": 3.302E23,
       "radius": 2440000.0,
       "orbit": {
         "semiMajorAxis": 5.790901023710302E10,
@@ -19,7 +19,7 @@
     },
     {
       "name": "Venus",
-      "mass": 4.868500000000001E24,
+      "mass": 4.8685E24,
       "radius": 6051800.0,
       "orbit": {
         "semiMajorAxis": 1.082085044648895E11,
@@ -132,7 +132,7 @@
     },
     {
       "name": "Pluto",
-      "mass": 1.3069999999999998E22,
+      "mass": 1.307E22,
       "radius": 1307.0,
       "orbit": {
         "semiMajorAxis": 5.977295212033069E12,
