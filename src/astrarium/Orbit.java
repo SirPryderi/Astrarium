@@ -31,9 +31,6 @@ public final class Orbit {
     private double argumentOfPeriapsis; // rad
     private double meanAnomalyAtEpoch; // rad
 
-    // CelestialBody on the orbit - Optional
-    private CelestialBody ownerBody;
-
     // Values that are rendered and cached
     private Position _positionFromParent;
     private Position _positionFromOrbitalPlane;
@@ -107,14 +104,6 @@ public final class Orbit {
 
     public static double calculateEccentricity(double a, double b) {
         return Math.sqrt(1 - (Math.pow(b, 2) / Math.pow(a, 2)));
-    }
-
-    public CelestialBody getCelestialBody() {
-        return ownerBody;
-    }
-
-    public void setCelestialBody(CelestialBody celestialBody) {
-        this.ownerBody = celestialBody;
     }
 
     //region Eccentricity

@@ -28,7 +28,6 @@ public class CelestialBody extends Body {
 
         if (orbit != null) {
             orbit.getParent().addChild(this);
-            orbit.setCelestialBody(this);
         }
     }
 
