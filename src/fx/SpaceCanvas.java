@@ -70,7 +70,7 @@ public class SpaceCanvas extends Canvas {
     }
 
     public void drawPlanet(CelestialBody celestialBody) {
-        double radius = 10;
+        double radius = 5;
         if (celestialBody.getRadius() * zoom > radius)
             radius = celestialBody.getRadius() * zoom;
 
@@ -90,13 +90,13 @@ public class SpaceCanvas extends Canvas {
 
         // Draw planet dot
         getGraphicsContext2D().setFill(Color.RED);
-        getGraphicsContext2D().fillOval(-radius / 2, -radius / 2, radius, radius);
+        getGraphicsContext2D().fillOval(-radius, -radius, radius * 2, radius * 2);
 
         // Draw label
         if (showNames.get()) {
             getGraphicsContext2D().setTextAlign(TextAlignment.CENTER);
             getGraphicsContext2D().setFill(Color.GREY);
-            getGraphicsContext2D().fillText(celestialBody.getName(), 0, radius + 7);
+            getGraphicsContext2D().fillText(celestialBody.getName(), 0, radius * 2 + 7);
         }
 
         // Draw sphere of influence
