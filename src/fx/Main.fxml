@@ -30,6 +30,7 @@
             <CheckMenuItem text="Show Sphere of Influence" accelerator="ALT+S"/>
             <CheckMenuItem text="Show Hill Sphere" accelerator="ALT+H"/>
             <CheckMenuItem text="Show Velocity Vector" accelerator="ALT+V"/>
+            <CheckMenuItem text="Show Markers" accelerator="ALT+M"/>
         </Menu>
     </MenuBar>
 

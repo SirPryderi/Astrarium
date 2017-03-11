@@ -28,6 +28,7 @@ public class SpaceCanvas extends Canvas {
     public BooleanProperty showSphereOfInfluence = new SimpleBooleanProperty(false);
     public BooleanProperty showHillSphere = new SimpleBooleanProperty(false);
     public BooleanProperty showTangentVector = new SimpleBooleanProperty(false);
+    public BooleanProperty showMarkers = new SimpleBooleanProperty(false);
     // Astrarium
     private Astrarium astrarium;
     // Visual properties
@@ -135,6 +136,22 @@ public class SpaceCanvas extends Canvas {
                 orbit.getSemiMajorAxis() * zoom * 2, // 2 a
                 orbit.getSemiMinorAxis() * zoom * 2 // 2 b
         );
+
+        if (showMarkers.get()) {
+            drawMarker(orbit.getPeriapsis() * zoom, 0, "Pe", 3);
+            drawMarker(-orbit.getApoapsis() * zoom, 0, "Ap", 5);
+        }
+
+        getGraphicsContext2D().restore();
+    }
+
+    private void drawMarker(double x, double y, String name, int radius) {
+        getGraphicsContext2D().save();
+        getGraphicsContext2D().setFill(Color.GREEN);
+
+        getGraphicsContext2D().fillOval(x - radius * 0.5, y * radius * 0.5, radius, radius);
+
+        // Todo write labels
 
         getGraphicsContext2D().restore();
     }

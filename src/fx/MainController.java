@@ -109,6 +109,7 @@ public class MainController {
         ((CheckMenuItem) (menu.getMenus().get(3).getItems().get(2))).selectedProperty().bindBidirectional(canvas.showSphereOfInfluence);
         ((CheckMenuItem) (menu.getMenus().get(3).getItems().get(3))).selectedProperty().bindBidirectional(canvas.showHillSphere);
         ((CheckMenuItem) (menu.getMenus().get(3).getItems().get(4))).selectedProperty().bindBidirectional(canvas.showTangentVector);
+        ((CheckMenuItem) (menu.getMenus().get(3).getItems().get(5))).selectedProperty().bindBidirectional(canvas.showMarkers);
     }
 
     private void initCanvas() {
