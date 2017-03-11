@@ -8,6 +8,10 @@ package astrarium.utils;
  * @author Vittorio
  */
 public class Position extends Vector {
+    public Position() {
+        super(0, 0, 0);
+    }
+
     public Position(double x, double y, double z) {
         super(x, y, z);
     }

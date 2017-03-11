@@ -12,8 +12,6 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.paint.Color;
 import javafx.scene.text.TextAlignment;
 
-import java.awt.geom.Point2D;
-
 /**
  * An extension of the standard JavaFX {@link Canvas}, capable of showing an {@link Astrarium} to screen.
  * <p>
@@ -23,17 +21,19 @@ import java.awt.geom.Point2D;
  */
 public class SpaceCanvas extends Canvas {
     // Flags
-    public BooleanProperty showOrbit = new SimpleBooleanProperty(true);
-    public BooleanProperty showNames = new SimpleBooleanProperty(true);
-    public BooleanProperty showSphereOfInfluence = new SimpleBooleanProperty(false);
-    public BooleanProperty showHillSphere = new SimpleBooleanProperty(false);
-    public BooleanProperty showTangentVector = new SimpleBooleanProperty(false);
-    public BooleanProperty showMarkers = new SimpleBooleanProperty(false);
+    BooleanProperty showOrbit = new SimpleBooleanProperty(true);
+    BooleanProperty showNames = new SimpleBooleanProperty(true);
+    BooleanProperty showSphereOfInfluence = new SimpleBooleanProperty(false);
+    BooleanProperty showHillSphere = new SimpleBooleanProperty(false);
+    BooleanProperty showTangentVector = new SimpleBooleanProperty(false);
+    BooleanProperty showMarkers = new SimpleBooleanProperty(false);
+
     // Astrarium
     private Astrarium astrarium;
+
     // Visual properties
     private double zoom = 0.5e-9;
-    private Point2D offset = new Point2D.Double(0, 0);
+    private Position offset = new Position();
 
     public void setAstrarium(Astrarium astrarium) {
         this.astrarium = astrarium;
@@ -246,18 +246,18 @@ public class SpaceCanvas extends Canvas {
     }
 
     public void makeCanvasDraggable() {
-        Point2D start = new Point2D.Double();
-        Point2D initialOffset = new Point2D.Double();
+        Position start = new Position();
+        Position initialOffset = new Position();
 
         this.setOnMousePressed(event -> {
-            initialOffset.setLocation(offset);
-            start.setLocation(event.getX(), event.getY());
+            initialOffset.setValues(offset);
+            start.setValues(event.getX(), event.getY());
         });
 
         this.setOnMouseDragged(event -> {
 
             this.setCursor(Cursor.CLOSED_HAND);
-            offset.setLocation(initialOffset.getX() + (event.getX() - start.getX()), (initialOffset.getY() + event.getY() - start.getY()));
+            offset.setValues(initialOffset.getX() + (event.getX() - start.getX()), (initialOffset.getY() + event.getY() - start.getY()), 0);
             this.setOnMouseReleased(event1 -> this.setCursor(Cursor.CROSSHAIR));
         });
 
@@ -279,12 +279,12 @@ public class SpaceCanvas extends Canvas {
             else
                 changeZoom(event.getDeltaY());
 
-            offset.setLocation(offset.getX() * zoom / old_zoom, offset.getY() * zoom / old_zoom);
+            offset.setValues(offset.getX() * zoom / old_zoom, offset.getY() * zoom / old_zoom);
         });
     }
 
     public void setOffset(double x, double y) {
-        offset.setLocation(-x * zoom, -y * zoom);
+        offset.setValues(-x * zoom, -y * zoom);
     }
 
     public void setOffset(Position position) {

@@ -150,6 +150,10 @@ public class Vector implements Cloneable {
         this.z = z;
     }
 
+    public void setValues(double x, double y) {
+        setValues(x, y, 0);
+    }
+
     public void setValues(double x, double y, double z) {
         this.x = x;
         this.y = y;
