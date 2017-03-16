@@ -7,16 +7,16 @@ package astrarium.utils;
  *
  * @author Vittorio
  */
-public abstract class Mathematics {
+public final class Mathematics {
+    private Mathematics() {
+    }
+
     public static double acosh(double x) {
         return Math.log(x + Math.sqrt(x * x - 1));
     }
 
     public static double acos2(double alpha, double beta) {
-
-        double signum = Math.signum(beta);
-
-        return Math.acos(alpha) * signum;
+        return Math.acos(alpha) * Math.signum(beta);
     }
 
     public static double hypotenuse(double a, double b) {
@@ -29,9 +29,5 @@ public abstract class Mathematics {
 
     public static double normaliseAngle(double angle) {
         return angle % Math.PI * 2;
-    }
-
-    public static void main(String args[]) {
-        System.out.println(normaliseAngle(-6.30));
     }
 }
