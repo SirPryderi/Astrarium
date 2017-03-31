@@ -3,6 +3,7 @@ package astrarium;
 import astrarium.utils.Mathematics;
 import astrarium.utils.Position;
 import astrarium.utils.Vector;
+import org.jetbrains.annotations.NotNull;
 
 import static astrarium.utils.Mathematics.acosh;
 
@@ -76,7 +77,7 @@ public final class Orbit {
         }
 
         if (eccentricity > 1) {
-            throw new RuntimeException("Not yet supported.");
+            throw new RuntimeException("Eccentricity > 1 not yet supported.");
         }
 
         final int MAX_ITERATIONS = 30;
@@ -107,6 +108,77 @@ public final class Orbit {
         return Math.sqrt(1 - (Math.pow(b, 2) / Math.pow(a, 2)));
     }
     //endregion Calculate Eccentricity
+
+    //region Calculate Orbit from Radius and Velocity
+    // FIXME
+    @NotNull
+    public static Orbit calculateOrbitFromPositionAndVelocity(CelestialBody body, Position position, Vector velocity) {
+        boolean isEquatorial = false;
+
+        if (position.getZ() == 0 && velocity.getZ() == 0)
+            isEquatorial = true;
+
+        Vector angularMomentum = position.crossProduct(velocity);
+
+        double distance = position.getMagnitude();
+        double speedSquared = velocity.getMagnitudeSquared();
+
+        double standardGravitationalParameter = body.getMass() * Astrarium.G;
+
+        Vector eccentricityVector =
+                position.product(speedSquared - standardGravitationalParameter / distance)
+                        .minus(velocity.product(position.dotProduct(velocity)))
+                        .multiplied(1 / standardGravitationalParameter);
+
+        double eccentricity = eccentricityVector.getMagnitude();
+
+
+        double longitudeOfAscendingNode = 0;
+        double argumentOfPeriapsis = 0;
+        if (!isEquatorial) {
+            Vector zAxisUnitVector = new Vector(0, 0, 1);
+
+            Vector nodeAxisVector = zAxisUnitVector.crossProduct(angularMomentum);
+
+            longitudeOfAscendingNode = Math.acos(nodeAxisVector.getX() / nodeAxisVector.getMagnitude());
+
+            if (longitudeOfAscendingNode == Double.NaN) {
+                throw new RuntimeException("Longitude of ascending node is NaN!");
+            }
+
+            argumentOfPeriapsis = Math.acos(nodeAxisVector.dotProduct(eccentricityVector) / nodeAxisVector.getMagnitude() / eccentricity);
+
+            if (nodeAxisVector.getY() < 0)
+                longitudeOfAscendingNode = Math.PI * 2 - longitudeOfAscendingNode;
+
+            System.out.println("Node axis " + nodeAxisVector);
+
+            System.out.println("LoAN " + longitudeOfAscendingNode);
+
+            System.out.println("AoP " + argumentOfPeriapsis);
+        } else {
+            longitudeOfAscendingNode = 0;
+        }
+
+        double specificOrbitalEnergy = speedSquared / 2 - standardGravitationalParameter / distance;
+
+        double semiMajorAxis = -standardGravitationalParameter / (2 * specificOrbitalEnergy);
+
+        double inclination = Math.acos(angularMomentum.getZ() / angularMomentum.getMagnitude());
+
+        System.out.println("Inclination " + inclination);
+
+        return new Orbit(
+                body,
+                semiMajorAxis,
+                eccentricity,
+                inclination,
+                longitudeOfAscendingNode,
+                argumentOfPeriapsis,
+                0
+        );
+    }
+    //endregion
 
     //region Eccentricity
     public double getEccentricity() {
