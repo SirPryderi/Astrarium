@@ -122,4 +122,16 @@ public abstract class Body {
      * @return orbit at rendered time.
      */
     abstract Orbit getOrbit();
+
+    /**
+     * Returns the orbit at the time specified.
+     * <p>
+     * For a {@link CelestialBody} running {@link #getOrbit()} is equivalent.
+     * <p>
+     * Note that {@link #renderAtTime(long)} must be launched before getting a meaningful value.
+     *
+     * @param time when to get the orbit in milliseconds
+     * @return orbit at the given time
+     */
+    abstract Orbit getOrbitAtTime(long time);
 }

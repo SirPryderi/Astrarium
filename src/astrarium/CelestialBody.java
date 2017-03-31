@@ -46,10 +46,17 @@ public class CelestialBody extends Body {
         return getOrbit().getParent();
     }
 
+    @Override
     @Nullable
     public Orbit getOrbit() {
         return orbit;
     }
+
+    @Override
+    Orbit getOrbitAtTime(long time) {
+        return getOrbit();
+    }
+
     //endregion Getters
 
     //region Calculations
