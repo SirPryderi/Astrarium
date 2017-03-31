@@ -68,9 +68,9 @@ public abstract class Body {
      */
     public Position getPosition() {
         if (this.getOrbit() == null)
-            return this.getRelativePosition();
+            return this.getPositionFromParent();
 
-        return (Position) getOrbit().getParent().getPosition().plus(getRelativePosition());
+        return (Position) getOrbit().getParent().getPosition().plus(getPositionFromParent());
     }
 
     /**
@@ -83,23 +83,11 @@ public abstract class Body {
      */
     public Position getPositionAtTime(long time) {
         if (this.getOrbit() == null)
-            return this.getRelativePosition();
+            return this.getPositionFromParent();
 
-        return (Position) getOrbitAtTime(time).getParent().getPositionAtTime(time).plus(getRelativePositionAtTime(time));
-    }
-
-    /**
-     * Returns the position relative to the reference object at the time specified.
-     *
-     * @param time the time in milliseconds.
-     * @return relative position at time
-     */
-    public Position getRelativePositionAtTime(long time) {
-        if (getOrbit() != null) {
-            return getOrbit().getPositionFromParent(time);
-        } else {
-            return new Position();
-        }
+        return (Position) getOrbitAtTime(time)
+                .getParent().getPositionAtTime(time)
+                .plus(getPositionFromParentAtTime(time));
     }
 
     /**
@@ -111,7 +99,7 @@ public abstract class Body {
      *
      * @return the position at when the object has been rendered.
      */
-    public Position getRelativePosition() {
+    public Position getPositionFromParent() {
         if (getOrbit() != null) {
             return getOrbit().getRenderedPositionFromParent();
         } else {
@@ -120,7 +108,23 @@ public abstract class Body {
     }
 
     /**
-     * Renders the position of the given object at the time specified and store the rendered parameters for being retrieved later with methods like {@link #getPosition()} or {@link #getRelativePosition()}.
+     * Returns the position relative to the reference object at the time specified.
+     *
+     * @param time the time in milliseconds.
+     * @return relative position at time
+     */
+    public Position getPositionFromParentAtTime(long time) {
+        if (getOrbit() != null) {
+            return getOrbit().getPositionFromParent(time);
+        } else {
+            return new Position();
+        }
+    }
+
+    /**
+     * Renders the position of the given object at the time specified
+     * and store the rendered parameters for being retrieved later
+     * with methods like {@link #getPosition()} or {@link #getPositionFromParent()}.
      *
      * @param time time in  milliseconds
      */
