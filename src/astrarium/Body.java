@@ -74,16 +74,31 @@ public abstract class Body {
     }
 
     /**
+     * Returns the absolute position of the object at the given time.
+     * <p>
+     * The position  is evaluated from the root element of the system.
+     *
+     * @param time the time in milliseconds.
+     * @return the absolute position of the object.
+     */
+    public Position getPositionAtTime(long time) {
+        if (this.getOrbit() == null)
+            return this.getRelativePosition();
+
+        return (Position) getOrbitAtTime(time).getParent().getPositionAtTime(time).plus(getRelativePositionAtTime(time));
+    }
+
+    /**
      * Returns the position relative to the reference object at the time specified.
      *
      * @param time the time in milliseconds.
      * @return relative position at time
      */
-    public Position getRelativePosition(long time) {
+    public Position getRelativePositionAtTime(long time) {
         if (getOrbit() != null) {
             return getOrbit().getPositionFromParent(time);
         } else {
-            return new Position(0, 0);
+            return new Position();
         }
     }
 
@@ -100,7 +115,7 @@ public abstract class Body {
         if (getOrbit() != null) {
             return getOrbit().getRenderedPositionFromParent();
         } else {
-            return new Position(0, 0);
+            return new Position();
         }
     }
 
