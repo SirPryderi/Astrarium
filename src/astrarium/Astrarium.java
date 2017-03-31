@@ -40,6 +40,8 @@ public class Astrarium {
     //region Getters
 
     /**
+     * Returns the root element of the simulation.
+     *
      * @return the root element of the simulation, e.g. the Sun.
      */
     @NotNull
@@ -48,7 +50,9 @@ public class Astrarium {
     }
 
     /**
-     * @return the current time of the simulation expressed in the milliseconds since the Unix Epoch.
+     * Returns the current time of the simulation expressed in the milliseconds since the Unix Epoch.
+     *
+     * @return the current time.
      */
     public long getTime() {
         return time;
