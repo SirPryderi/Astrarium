@@ -1,6 +1,7 @@
 package astrarium;
 
 import astrarium.utils.Position;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * The {@link Body} abstract class wraps methods and attributes of an object that can orbit another {@link Body}.
@@ -13,7 +14,7 @@ import astrarium.utils.Position;
  */
 public abstract class Body {
     /**
-     * Name of the body
+     * Name of the body.
      **/
     private String name;
 
@@ -40,18 +41,47 @@ public abstract class Body {
     }
 
     //region Getters and Setters
+
+    /**
+     * Retunrs the name of the {@link Body}.
+     * <p>
+     * The name must be unique.
+     *
+     * @return name of the body.
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * Sets the name of the body.
+     * <p>
+     * Checks must be actuated elsewhere to guarantee that there are no other objects with the same name
+     * inside the same Astrarium.
+     *
+     * @param name name of the {@link Body}.
+     */
     public void setName(String name) {
         this.name = name;
     }
 
+    /**
+     * Returns the mass of the {@link Body} expressed in kilograms.
+     *
+     * @return mass in skilograms
+     */
     public double getMass() {
         return mass;
     }
 
+    /**
+     * Returns the maximum radius of the object expressed in meters.
+     * <p>
+     * It is either the equatorial radius for a {@link CelestialBody},
+     * or the maximum distance from the center of mass for a {@link Spacecraft}
+     *
+     * @return radius in meters
+     */
     public double getRadius() {
         return radius;
     }
@@ -140,6 +170,7 @@ public abstract class Body {
      *
      * @return orbit at rendered time.
      */
+    @Nullable
     abstract Orbit getOrbit();
 
     /**
@@ -152,5 +183,6 @@ public abstract class Body {
      * @param time when to get the orbit in milliseconds
      * @return orbit at the given time
      */
+    @Nullable
     abstract Orbit getOrbitAtTime(long time);
 }
