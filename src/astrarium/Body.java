@@ -43,7 +43,7 @@ public abstract class Body {
     //region Getters and Setters
 
     /**
-     * Retunrs the name of the {@link Body}.
+     * Returns the name of the {@link Body}.
      * <p>
      * The name must be unique.
      *
@@ -68,7 +68,7 @@ public abstract class Body {
     /**
      * Returns the mass of the {@link Body} expressed in kilograms.
      *
-     * @return mass in skilograms
+     * @return mass in kilograms
      */
     public double getMass() {
         return mass;
