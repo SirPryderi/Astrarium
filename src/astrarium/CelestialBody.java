@@ -6,20 +6,35 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * A class representing a natural body of the Solar System e.g. Stars, Planets, comets, etc.
+ * A class representing a natural body of the Solar System e.g. Stars, Planets, Comets, etc.
  * <p>
  * Created  on 28-Oct-16.
  *
  * @author Vittorio
  */
 public class CelestialBody extends Body {
-    // List of children Bodies
+    /**
+     * List of children Bodies.
+     */
     private final List<CelestialBody> children;
 
-    // Orbit
+    /**
+     * Orbit of the planet.
+     */
     private Orbit orbit;
 
     //region Constructors
+
+    /**
+     * Creates a new body with an Orbit in it.
+     * <p>
+     * Note: it will be added automatically to the children of the parent specified in the {@link Orbit}.
+     *
+     * @param name   name of the body.
+     * @param mass   mass of the body in kilograms.
+     * @param radius radius of the body in meters
+     * @param orbit  the orbit where the
+     */
     public CelestialBody(String name, double mass, double radius, Orbit orbit) {
         super(name, mass, radius);
         this.orbit = orbit;
@@ -31,19 +46,41 @@ public class CelestialBody extends Body {
         }
     }
 
+    /**
+     * Overloaded constructor with @{@code null} orbit. Useful to create root elements.
+     *
+     * @param name   name of the body.
+     * @param mass   mass of the body in kilograms.
+     * @param radius radius of the body in meters
+     */
     public CelestialBody(String name, double mass, double radius) {
         this(name, mass, radius, null);
     }
     //endregion Constructors
 
     //region Getters
+
+    /**
+     * Returns a {@link List} of {@link CelestialBody} that are contained inside the current object.
+     *
+     * @return List of children CelestialBody.
+     */
     public List<CelestialBody> getChildren() {
         return children;
     }
 
+    /**
+     * Returns the parent {@link CelestialBody} of the current object.
+     * Returns null if the current object is the root of the system.
+     *
+     * @return parent body.
+     */
     @Nullable
     public CelestialBody getParent() {
-        return getOrbit().getParent();
+        if (getOrbit() != null)
+            return getOrbit().getParent();
+        else
+            return null;
     }
 
     @Override
@@ -60,24 +97,49 @@ public class CelestialBody extends Body {
     //endregion Getters
 
     //region Calculations
+
+    /**
+     * Returns the standard gravitational parameter, a constant for the orbiting bodies,
+     * defined as the product of the Universal Gravitational Constant (G) and the mass of the object.
+     *
+     * @return the standard gravitational parameter = G * mass.
+     */
     public double getStandardGravitationalParameter() {
         return Astrarium.G * this.getMass();
     }
 
+    /**
+     * Returns the velocity in m/s required to escape the current body at a given radius.
+     *
+     * @param radius in meters from the center of mass of the body.
+     * @return the escape velocity in m/s.
+     */
     public double getEscapeVelocity(Double radius) {
         return Math.sqrt(2 * getStandardGravitationalParameter() / radius);
     }
 
+    /**
+     * Returns the Sphere of Influence (SoI) radius of the current body.
+     * The SoI is, in other words, the radius defining the portion of space
+     * where an object can be approximated to orbit only the current body.
+     *
+     * @return SoI radius in meters.
+     */
     public double getSphereOfInfluence() {
-
-        if (orbit != null)
+        if (getOrbit() != null)
             return getOrbit().getSemiMajorAxis() * Math.pow(getMass() / getParent().getMass(), 2D / 5D);
         else // The root body of the system  will have infinite SoI
             return Double.POSITIVE_INFINITY;
     }
 
+    /**
+     * Returns the Hill Sphere radius of the current body.
+     * The Hill Sphere, similarly to the SoI delimits a region of space where the orbit will be stable.
+     *
+     * @return the radius of the Hill Sphere in meters.
+     */
     public double getHillSphere() {
-        if (orbit != null)
+        if (getOrbit() != null)
             return getOrbit().getSemiMajorAxis() * (1 - getOrbit().getEccentricity())
                     * Math.pow(getMass() / (3 * getParent().getMass()), 1 / 3D);
         else // The root body of the system  will have infinite SoI
@@ -85,6 +147,13 @@ public class CelestialBody extends Body {
     }
     //endregion Calculations
 
+    /**
+     * Adds a {@link CelestialBody} as a child of the current body.
+     *
+     * @param celestialBody the body to add.
+     * @return true if successfully added | false in case of error.
+     */
+    @SuppressWarnings("UnusedReturnValue")
     public boolean addChild(CelestialBody celestialBody) {
         return this.children.add(celestialBody);
     }
