@@ -12,7 +12,7 @@ public class Matrix {
     /**
      * Values of the matrix.
      */
-    private double[][] matrix;
+    private final double[][] matrix;
 
     /**
      * Creates a matrix from an array of array as initialisation.
