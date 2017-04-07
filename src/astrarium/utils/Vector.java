@@ -239,12 +239,13 @@ public class Vector {
     }
     //endregion Operations
 
+    //region Getters and Setters
+
     /**
      * Gets the X value of the {@link Vector}.
      *
      * @return X value.
      */
-    //region Getters and Setters
     public double getX() {
         return x;
     }
