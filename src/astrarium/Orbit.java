@@ -128,7 +128,7 @@ public final class Orbit {
         Vector eccentricityVector =
                 position.product(speedSquared - standardGravitationalParameter / distance)
                         .minus(velocity.product(position.dotProduct(velocity)))
-                        .multiplied(1 / standardGravitationalParameter);
+                        .divided(standardGravitationalParameter);
 
         double eccentricity = eccentricityVector.getMagnitude();
 

@@ -77,7 +77,7 @@ public class Vector {
     public double normalise() {
         double length = getMagnitude();
 
-        this.multiplied(1D / length);
+        this.divided(length);
 
         return length;
     }
@@ -174,6 +174,21 @@ public class Vector {
         this.x *= factor;
         this.y *= factor;
         this.z *= factor;
+        return this;
+    }
+
+    /**
+     * Divides every component of the vector by the specified scalar {@code factor}.
+     * <p>
+     * Note: the original vector is overwritten!
+     *
+     * @param factor the scalar factor to divide the vector with.
+     * @return the {@link Vector} after being divided.
+     */
+    public Vector divided(double factor) {
+        this.x /= factor;
+        this.y /= factor;
+        this.z /= factor;
         return this;
     }
 
