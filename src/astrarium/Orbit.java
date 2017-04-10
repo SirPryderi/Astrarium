@@ -796,15 +796,25 @@ public final class Orbit {
      * @param position position to rotate
      * @return the rotate position.
      */
-    public Position rotatePositionOnOrbitalPlane(Position position) {
-        Vector longitudeOfAscendingNodeAxis = new Vector(0, 0, 1);
-
+    public Position rotatePositionOnOrbitalPlane(@NotNull Position position) {
         Position rotatedPosition = position.getCopy();
 
-        rotatedPosition.rotate(longitudeOfAscendingNodeAxis, longitudeOfAscendingNode);
-        //Vector inclinationAxis = new Vector(Math.cos(longitudeOfAscendingNode), Math.sin(longitudeOfAscendingNode), 0);
-        //_positionFromParent.rotate(inclinationAxis, inclination);
-        // Todo argument of periapsis
+        if (inclination != 0) {
+            Vector nodeAxis = Vector.getDirectionVector(longitudeOfAscendingNode);
+            Vector normalAxis = new Vector(0, 0, 1);
+
+            normalAxis.rotate(nodeAxis, inclination);
+            //normalAxis.rotateZ(longitudeOfAscendingNode - PI / 2);
+            // TODO the normal axis calculation seems to be okay, but there might be a better way of finding it.
+
+            rotatedPosition.rotate(nodeAxis, inclination);
+            rotatedPosition.rotateZ(longitudeOfAscendingNode);
+            rotatedPosition.rotate(normalAxis, argumentOfPeriapsis);
+        } else {
+            rotatedPosition.rotateZ(longitudeOfAscendingNode + argumentOfPeriapsis);
+            // AKA longitude of periapsis
+        }
+
         return rotatedPosition;
     }
     //endregion Positions
