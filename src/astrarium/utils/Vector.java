@@ -149,6 +149,11 @@ public class Vector {
         this.multiplied(length);
     }
 
+    /**
+     * Rotates the current vector on the Z axis (0, 0, 1) with angle {@code theta}.
+     *
+     * @param theta angle of rotation.
+     */
     public void rotateZ(double theta) {
         if (theta == 0)
             return;
@@ -157,6 +162,21 @@ public class Vector {
         double s = sin(theta);
 
         this.setValues(x * c - y * s, y * c + x * s, z);
+    }
+
+    /**
+     * Rotates the current vector on the X axis (1, 0, 0) with angle {@code theta}.
+     *
+     * @param theta angle of rotation.
+     */
+    public void rotateX(double theta) {
+        if (theta == 0)
+            return;
+
+        double c = cos(theta);
+        double s = sin(theta);
+
+        this.setValues(x, y * c - z * s, z * c + y * s);
     }
     //endregion Rotation
 
