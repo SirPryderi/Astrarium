@@ -1,5 +1,8 @@
 package astrarium.utils;
 
+import static java.lang.Math.cos;
+import static java.lang.Math.sin;
+
 /**
  * A utility class that represents the mathematical entity of a Vector.
  * <p>
@@ -43,7 +46,7 @@ public class Vector {
      * @return the direction vector.
      */
     public static Vector getDirectionVector(double angle) {
-        return new Vector(Math.cos(angle), Math.sin(angle), 0);
+        return new Vector(cos(angle), sin(angle), 0);
     }
 
     //region Magnitude
@@ -117,6 +120,10 @@ public class Vector {
      * @param theta rotation angle.
      */
     public void rotate(Vector axis, double theta) {
+        // If the angle is zero, there is no need to do anything. Day off, guys!
+        if (theta == 0)
+            return;
+
         // Normalise vector
         Double length = this.getMagnitude();
         this.normalise();
@@ -126,9 +133,9 @@ public class Vector {
 
         //region Evil Transformation Matrix
         // Useful vars
-        double c = Math.cos(theta);
-        double s = Math.sin(theta);
-        double t = 1 - Math.cos(theta);
+        double c = cos(theta);
+        double s = sin(theta);
+        double t = 1 - cos(theta);
 
         double norm_final_x = x * (t * axis.x * axis.x + c) + y * (t * axis.x * axis.y - s * axis.z) + z * (t * axis.x * axis.z + s * axis.y);
         double norm_final_y = x * (t * axis.x * axis.y + s * axis.z) + y * (t * axis.y * axis.y + c) + z * (t * axis.y * axis.z - s * axis.x);
@@ -140,6 +147,16 @@ public class Vector {
 
         // De-normalise vector
         this.multiplied(length);
+    }
+
+    public void rotateZ(double theta) {
+        if (theta == 0)
+            return;
+
+        double c = cos(theta);
+        double s = sin(theta);
+
+        this.setValues(x * c - y * s, y * c + x * s, z);
     }
     //endregion Rotation
 
