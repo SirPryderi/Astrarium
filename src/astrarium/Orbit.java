@@ -490,7 +490,7 @@ public final class Orbit {
      * @return the specific orbital energy.
      */
     public double getSpecificOrbitalEnergy() {
-        if (getOrbitType() == orbitType.PARABOLIC)
+        if (getOrbitType() == OrbitType.PARABOLIC)
             return 0;
 
         return -((STANDARD_GRAVITATIONAL_PARAMETER) / (2 * this.getSemiMajorAxis()));
@@ -869,21 +869,21 @@ public final class Orbit {
     //region Orbit type
 
     /**
-     * Returns an {@link orbitType} that describes the geometry of the orbit.
+     * Returns an {@link OrbitType} that describes the geometry of the orbit.
      *
      * @return geometry of the orbit.
      */
-    public orbitType getOrbitType() {
+    public OrbitType getOrbitType() {
         if (eccentricity < 0)
             throw new Error("Eccentricity should NEVER be negative.");
         if (eccentricity == 0)
-            return orbitType.CIRCULAR;
+            return OrbitType.CIRCULAR;
         if (0 < eccentricity && eccentricity < 1)
-            return orbitType.ELLIPTICAL;
+            return OrbitType.ELLIPTICAL;
         if (eccentricity == 1)
-            return orbitType.PARABOLIC;
+            return OrbitType.PARABOLIC;
         else
-            return orbitType.HYPERBOLIC;
+            return OrbitType.HYPERBOLIC;
     }
     //endregion
 
@@ -913,12 +913,10 @@ public final class Orbit {
         return parent;
     }
 
-    // TODO capitalise!
-
     /**
      * An enumeration describing the geometry of the orbit.
      */
-    public enum orbitType {
+    public enum OrbitType {
         /**
          * Circular orbit.
          * Eccentricity = 0.
