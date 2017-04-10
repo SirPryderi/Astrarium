@@ -409,66 +409,19 @@ public final class Orbit {
     }
 
     /**
-     * Returns the angle of the line tangent to the orbit at the current position calculated with {@link #renderAtTime(long)}. Value in radians.
+     * Returns the angle of the line tangent to the orbit
+     * at the current position calculated with {@link #renderAtTime(long)}.
+     * Value in radians.
      * <p>
      * This also describe the direction of the velocity vector on the orbital plane.
+     * <p>
+     * See: <a href="https://en.wikipedia.org/wiki/Ellipse#General_parametric_form">Wikipedia</a>
      *
      * @return angle of the tangent direction.
      */
-    public double getTangentVector() {
-        return getTangentVector3();
-    }
-
-
-    public double getTangentVector0() {
-        return _eccentricAnomaly + PI / 2;
-    }
-
-    public double getTangentVector1() {
-        double vx = this.getSemiMajorAxis() * sqrt(1D + pow(tan(_eccentricAnomaly), 2D));
-
-
-        if (getRenderedPositionFromParent().getX() > 0) {
-
-        } else if (getRenderedPositionFromParent().getX() < 0) {
-            vx = -vx;
-        } else {
-            return _eccentricAnomaly + PI / 2;
-        }
-
-        vx -= getFocusDistance();
-
-        Position vPoint = new Position(vx, 0, 0);
-
-        double v = vPoint.angleOfLineBetweenThisAnd(getRenderedPositionFromParent());
-
-        //return getPositionFromParent().angleOfLineBetweenThisAnd(vPoint);
-        //return e;
-
-        if (getRenderedPositionFromParent().getX() > 0 && getRenderedPositionFromParent().getY() > 0) {
-            v += PI;
-        }
-
-        if (getRenderedPositionFromParent().getX() < 0 && getRenderedPositionFromParent().getY() < 0) {
-            v += PI;
-        }
-
-        v += PI;
-
-        return v;
-//
-//
-    }
-
-    public double getTangentVector2() {
-        return -atan2(getSemiMinorAxis(), getSemiMajorAxis() * tan(_eccentricAnomaly));
-    }
-
-    public double getTangentVector3() {
+    public double getTangentAngle() {
         Position center = new Position(-getFocusDistance(), 0);
         double theta = center.angleOfLineBetweenThisAnd(_positionFromOrbitalPlane);
-
-        // https://en.wikipedia.org/wiki/Ellipse#General_parametric_form
 
         double tangent = -atan2(1 - (eccentricity * eccentricity), tan(theta));
 
@@ -479,11 +432,6 @@ public final class Orbit {
         }
 
         return tangent;
-    }
-
-    public double getTangentVector4() {
-
-        return atan2(1 - (eccentricity * eccentricity), tan(_eccentricAnomaly));
     }
     //endregion Angles
 
