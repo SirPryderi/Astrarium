@@ -170,12 +170,19 @@ public final class Orbit {
 
     /**
      * Utility method to calculate the eccentricity of an orbit given its semi-major and semi-minor axes.
+     * <p>
+     * Both values must be greater than zero,
+     * and {@code a} must be greater than {@code b}.
      *
      * @param a Semi-major axis in meters.
      * @param b Semi-minor axis in meters.
      * @return the value of the eccentricity.
      */
     public static double calculateEccentricity(double a, double b) {
+        if (b <= 0) throw new IllegalArgumentException("The semi-minor axis must be greater than zero.");
+        if (a < b) throw new IllegalArgumentException("The semi-major axis must be greater than the semi-minor.");
+        // No need to check if a is positive, because it needs to be greater than b.
+
         return sqrt(1 - (pow(b, 2) / pow(a, 2)));
     }
     //endregion Calculate Eccentricity
