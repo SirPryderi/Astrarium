@@ -64,7 +64,8 @@ public final class Orbit {
 
     //endregion
 
-    //region Values that are rendered and cached
+    //region Rendered Values
+    // These values are calculated with #renderAtTime() and are stored only for performance purposes.
     /**
      * The position of the body from the parent when {@link #renderAtTime(long)} has been launched.
      */
@@ -821,7 +822,7 @@ public final class Orbit {
     }
     //endregion ToString
 
-    //region Orbit type
+    //region Get Orbit type
 
     /**
      * Returns an {@link OrbitType} that describes the geometry of the orbit.
@@ -842,6 +843,8 @@ public final class Orbit {
     }
     //endregion
 
+    //region Render At Time
+
     /**
      * Renders the position of the given object at the time specified
      * and store the rendered parameters for being retrieved later
@@ -858,6 +861,9 @@ public final class Orbit {
         this._positionFromOrbitalPlane = getPositionOnOrbitalPlaneFromEccentricAnomaly(this._eccentricAnomaly);
         this._positionFromParent = rotatePositionOnOrbitalPlane(this._positionFromOrbitalPlane.getCopy());
     }
+    //endregion
+
+    //region Get Parent
 
     /**
      * Returns the reference body of the orbit.
@@ -867,6 +873,9 @@ public final class Orbit {
     public CelestialBody getParent() {
         return parent;
     }
+    //endregion
+
+    //region Orbit Type
 
     /**
      * An enumeration describing the geometry of the orbit.
@@ -893,4 +902,5 @@ public final class Orbit {
          */
         HYPERBOLIC
     }
+    //endregion
 }
