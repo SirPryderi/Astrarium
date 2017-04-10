@@ -155,7 +155,7 @@ public final class Orbit {
         zero = eccentricAnomaly - eccentricity * sin(meanAnomaly) - meanAnomaly;
 
         // Evil loop here
-        for (int i = 0; (Math.abs(zero) > delta) && (i < MAX_ITERATIONS); i++) {
+        for (int i = 0; (abs(zero) > delta) && (i < MAX_ITERATIONS); i++) {
             // TODO Fix possible division by zero.
             eccentricAnomaly = eccentricAnomaly - zero / (1 - eccentricity * cos(eccentricAnomaly));
             zero = eccentricAnomaly - eccentricity * sin(eccentricAnomaly) - meanAnomaly;
@@ -220,16 +220,16 @@ public final class Orbit {
 
             Vector nodeAxisVector = zAxisUnitVector.crossProduct(angularMomentum);
 
-            longitudeOfAscendingNode = Math.acos(nodeAxisVector.getX() / nodeAxisVector.getMagnitude());
+            longitudeOfAscendingNode = acos(nodeAxisVector.getX() / nodeAxisVector.getMagnitude());
 
             if (longitudeOfAscendingNode == Double.NaN) {
                 throw new RuntimeException("Longitude of ascending node is NaN!");
             }
 
-            argumentOfPeriapsis = Math.acos(nodeAxisVector.dotProduct(eccentricityVector) / nodeAxisVector.getMagnitude() / eccentricity);
+            argumentOfPeriapsis = acos(nodeAxisVector.dotProduct(eccentricityVector) / nodeAxisVector.getMagnitude() / eccentricity);
 
             if (nodeAxisVector.getY() < 0)
-                longitudeOfAscendingNode = Math.PI * 2 - longitudeOfAscendingNode;
+                longitudeOfAscendingNode = PI * 2 - longitudeOfAscendingNode;
 
             System.out.println("Node axis " + nodeAxisVector);
 
@@ -244,7 +244,7 @@ public final class Orbit {
 
         double semiMajorAxis = -standardGravitationalParameter / (2 * specificOrbitalEnergy);
 
-        double inclination = Math.acos(angularMomentum.getZ() / angularMomentum.getMagnitude());
+        double inclination = acos(angularMomentum.getZ() / angularMomentum.getMagnitude());
 
         System.out.println("Inclination " + inclination);
 
@@ -317,7 +317,7 @@ public final class Orbit {
             case PARABOLIC:
                 return 2 * getPeriapsis();
             default:
-                return Math.abs(this.getSemiMajorAxis() * (1 - pow(this.getEccentricity(), 2)));
+                return abs(this.getSemiMajorAxis() * (1 - pow(this.getEccentricity(), 2)));
         }
 
     }
@@ -414,7 +414,7 @@ public final class Orbit {
 
 
     public double getTangentVector0() {
-        return _eccentricAnomaly + Math.PI / 2;
+        return _eccentricAnomaly + PI / 2;
     }
 
     public double getTangentVector1() {
@@ -426,7 +426,7 @@ public final class Orbit {
         } else if (getRenderedPositionFromParent().getX() < 0) {
             vx = -vx;
         } else {
-            return _eccentricAnomaly + Math.PI / 2;
+            return _eccentricAnomaly + PI / 2;
         }
 
         vx -= getFocusDistance();
@@ -439,14 +439,14 @@ public final class Orbit {
         //return e;
 
         if (getRenderedPositionFromParent().getX() > 0 && getRenderedPositionFromParent().getY() > 0) {
-            v += Math.PI;
+            v += PI;
         }
 
         if (getRenderedPositionFromParent().getX() < 0 && getRenderedPositionFromParent().getY() < 0) {
-            v += Math.PI;
+            v += PI;
         }
 
-        v += Math.PI;
+        v += PI;
 
         return v;
 //
@@ -465,10 +465,10 @@ public final class Orbit {
 
         double tangent = -atan2(1 - (eccentricity * eccentricity), tan(theta));
 
-        double PI_BY_TWO = Math.PI / 2;
+        double PI_BY_TWO = PI / 2;
 
         if (-PI_BY_TWO < theta && theta < PI_BY_TWO) {
-            tangent += Math.PI;
+            tangent += PI;
         }
 
         return tangent;
@@ -576,7 +576,7 @@ public final class Orbit {
     public double getVelocityAngle() {
         double trueAnomaly = getTrueAnomaly();
 
-        return trueAnomaly + Math.PI / 2 + getVelocityAngle(trueAnomaly);
+        return trueAnomaly + PI / 2 + getVelocityAngle(trueAnomaly);
     }
 
     /**
@@ -749,9 +749,10 @@ public final class Orbit {
      *
      * @return the period of the orbit.
      */
-    // TODO WHAT THE HELL? This should be in milliseconds.
     public long getPeriod() {
-        return new Double(2 * Math.PI * sqrt(pow(semiMajorAxis, 3) / STANDARD_GRAVITATIONAL_PARAMETER)).longValue();
+        return new Double(
+                2000D * PI * sqrt(pow(semiMajorAxis, 3) / STANDARD_GRAVITATIONAL_PARAMETER)
+        ).longValue();
     }
 
     /**
@@ -761,11 +762,10 @@ public final class Orbit {
      * @param theta the true anomaly.
      * @return the time from periapsis in milliseconds.
      */
-    //TODO Same here, move to milliseconds.
-    public double getTimeFromPeriapsis(double theta) {
+    public long getTimeFromPeriapsis(double theta) {
         if (eccentricity >= 1)
             throw new RuntimeException("Not implemented");
-        return getMeanAnomalyFromAngle(theta) * getPeriod() / (2 * Math.PI);
+        return new Double(getMeanAnomalyFromAngle(theta) * 1000D * getPeriod() / (2D * PI)).longValue();
     }
     //endregion
 
