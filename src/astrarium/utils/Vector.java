@@ -36,6 +36,16 @@ public class Vector {
         this.z = z;
     }
 
+    /**
+     * Returns a two-dimensional unit vector representing the given {@code angle}.
+     *
+     * @param angle the direction of the vector.
+     * @return the direction vector.
+     */
+    public static Vector getDirectionVector(double angle) {
+        return new Vector(Math.cos(angle), Math.sin(angle), 0);
+    }
+
     //region Magnitude
 
     /**
@@ -131,6 +141,9 @@ public class Vector {
         // De-normalise vector
         this.multiplied(length);
     }
+    //endregion Rotation
+
+    //region Operations
 
     /**
      * Rotates a vector along {@code axis} of the amount of {@code theta}.
@@ -239,6 +252,9 @@ public class Vector {
         setValues(this.getX() + vector.getX(), this.getY() + vector.getY(), this.getZ() + vector.getZ());
         return this;
     }
+    //endregion Operations
+
+    //region Getters and Setters
 
     /**
      * Subtract the second {@link Vector} form the first one.
