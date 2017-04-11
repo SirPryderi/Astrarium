@@ -45,6 +45,15 @@ class FormGridAdapter {
     }
 
     /**
+     * Returns the last used row index.
+     *
+     * @return last offset.
+     */
+    public int getOffset() {
+        return offset;
+    }
+
+    /**
      * Adds the row with label to the next available slot.
      *
      * @param label text label of the row.
