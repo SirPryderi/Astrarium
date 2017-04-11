@@ -1,8 +1,11 @@
 package fx.modals;
 
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
+import javafx.scene.layout.GridPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.jetbrains.annotations.NotNull;
@@ -23,6 +26,17 @@ public abstract class Modal<T> extends Stage {
         this.setScene(new Scene(initialise()));
 
         this.sizeToScene();
+    }
+
+    protected static GridPane makeGridPane() {
+        GridPane gridPane = new GridPane();
+
+        gridPane.setAlignment(Pos.CENTER);
+        gridPane.setHgap(10);
+        gridPane.setVgap(10);
+        gridPane.setPadding(new Insets(25, 25, 25, 25));
+
+        return gridPane;
     }
 
     @NotNull
