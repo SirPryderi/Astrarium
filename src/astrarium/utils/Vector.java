@@ -1,7 +1,6 @@
 package astrarium.utils;
 
-import static java.lang.Math.cos;
-import static java.lang.Math.sin;
+import static java.lang.Math.*;
 
 /**
  * A utility class that represents the mathematical entity of a Vector.
@@ -398,6 +397,17 @@ public class Vector {
         this.z = vector.z;
     }
     //endregion
+
+    /**
+     * Returns the result of the atan2() function using x and y.
+     * <p>
+     * The z value will not be used.
+     *
+     * @return the longitude of the vector
+     */
+    public double getLongitude() {
+        return atan2(y, x);
+    }
 
     /**
      * Returns an instance with the same values of the original {@link Vector}.
