@@ -55,6 +55,9 @@ public final class Mathematics {
      * @return normalise angle.
      */
     public static double normaliseAngle(double angle) {
-        return Math.atan2(Math.sin(angle), Math.cos(angle));
+        if (Math.abs(angle) <= Math.PI) return angle;
+
+        final double TWO_PI = Math.PI * 2;
+        return angle - TWO_PI * Math.floor((angle + Math.PI) / TWO_PI);
     }
 }
