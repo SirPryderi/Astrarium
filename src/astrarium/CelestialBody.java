@@ -1,9 +1,14 @@
 package astrarium;
 
+import astrarium.utils.Position;
+import astrarium.utils.Vector;
 import com.sun.istack.internal.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static java.lang.Math.PI;
+import static java.lang.Math.sqrt;
 
 /**
  * A class representing a natural body of the Solar System e.g. Stars, Planets, Comets, etc.
@@ -144,6 +149,25 @@ public class CelestialBody extends Body {
                     * Math.pow(getMass() / (3 * getParent().getMass()), 1 / 3D);
         else // The root body of the system  will have infinite SoI
             return Double.POSITIVE_INFINITY;
+    }
+
+    /**
+     * Returns a velocity {@link Vector} that a spacecraft found at the given {@link Position}
+     * must have to be in a circular {@link Orbit} around the reference body.
+     *
+     * @param position the position of the spacecraft.
+     * @return The velocity relative to the body that the object must reach to be in a circular orbit.
+     */
+    public Vector getCirculaOrbitVelocity(Position position) {
+        double speed = sqrt(this.getStandardGravitationalParameter() / position.getMagnitude());
+
+        double angle = position.getLongitude() + PI / 2;
+
+        Vector velocity = new Vector(speed, 0, 10);
+
+        velocity.rotateZ(angle);
+
+        return velocity;
     }
     //endregion Calculations
 
