@@ -9,7 +9,7 @@ package astrarium.utils;
  */
 public class Position extends Vector {
     /**
-     * Creates a new position with values <0, 0, 0>.
+     * Creates a new position with values &lt;0, 0, 0&gt;.
      */
     public Position() {
         super(0, 0, 0);
