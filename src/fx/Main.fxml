@@ -8,21 +8,21 @@
 
     <MenuBar fx:id="menu" HBox.hgrow="ALWAYS">
         <Menu mnemonicParsing="false" text="File">
-            <MenuItem mnemonicParsing="false" text="Save" accelerator="Shortcut+S"/>
+            <MenuItem mnemonicParsing="false" text="Save" accelerator="Shortcut+S" disable="true"/>
             <SeparatorMenuItem/>
             <MenuItem mnemonicParsing="false" text="Open..." accelerator="Shortcut+O" onAction="#loadFile"/>
-            <MenuItem mnemonicParsing="false" text="Save as..." accelerator="Shortcut+Shift+S"/>
+            <MenuItem mnemonicParsing="false" text="Save as..." accelerator="Shortcut+Shift+S" disable="true"/>
             <SeparatorMenuItem/>
-            <MenuItem mnemonicParsing="false" text="Exit" accelerator="Shortcut+Q"/>
+            <MenuItem mnemonicParsing="false" text="Exit" accelerator="Shortcut+Q" disable="true"/>
         </Menu>
         <Menu text="Edit">
-            <MenuItem text="Add Body..."/>
-            <MenuItem text="Add Spacecraft..."/>
+            <MenuItem text="Add Body..." onAction="#newBody"/>
+            <MenuItem text="Add Spacecraft..." disable="true"/>
             <SeparatorMenuItem/>
-            <MenuItem text="Preferences..."/>
+            <MenuItem text="Preferences..." disable="true"/>
         </Menu>
         <Menu text="Mission">
-            <MenuItem text="New..." accelerator="Shortcut+N"/>
+            <MenuItem text="New..." accelerator="Shortcut+N" disable="true"/>
         </Menu>
         <Menu text="View">
             <CheckMenuItem text="Show orbit" accelerator="ALT+O"/>

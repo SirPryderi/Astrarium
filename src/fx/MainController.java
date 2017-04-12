@@ -2,6 +2,8 @@ package fx;
 
 import astrarium.Astrarium;
 import astrarium.CelestialBody;
+import fx.modals.BodyModal;
+import fx.modals.Modal;
 import io.JsonHub;
 import javafx.animation.AnimationTimer;
 import javafx.application.Platform;
@@ -29,6 +31,8 @@ import java.util.Date;
  * @author Vittorio
  */
 public class MainController {
+    public static Astrarium astrarium;
+
     //region FXML Nodes
     @FXML
     public MenuBar menu;
@@ -48,7 +52,6 @@ public class MainController {
 
     private CanvasAnimationTimer canvasAnimationTimer;
     private long time = new Date().getTime();
-    private Astrarium astrarium;
 
     //region Constructor
     public MainController() {
@@ -69,8 +72,6 @@ public class MainController {
     }
 
     private void initUI() {
-        assert astrarium.getRoot() != null;
-
         initMenu();
         initCanvas();
         initNavigationTree();
@@ -193,6 +194,14 @@ public class MainController {
             }
 
         canvasAnimationTimer.start();
+    }
+
+    @FXML
+    public void newBody() {
+        Modal orbit = new BodyModal();
+        orbit.initOwner(canvas.getScene().getWindow());
+        orbit.showAndWait();
+        orbit.getResult();
     }
     //endregion
 
