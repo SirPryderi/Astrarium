@@ -4,8 +4,7 @@ import astrarium.utils.Position;
 import astrarium.utils.Vector;
 import org.jetbrains.annotations.NotNull;
 
-import static astrarium.utils.Mathematics.acos2;
-import static astrarium.utils.Mathematics.acosh;
+import static astrarium.utils.Mathematics.*;
 import static java.lang.Math.*;
 
 /**
@@ -192,19 +191,50 @@ public final class Orbit {
 
     /**
      * Calculates the orbit around {@code body}, given the relative velocity and position from it.
+     * It also regulates the mean anomaly at epoch to match the current position of the object.
+     *
+     * @param body     the reference body to calculate the orbit from.
+     * @param position the position relative to the body.
+     * @param velocity the velocity relative to the body.
+     * @param time     time when the measurement were made.
+     * @return the {@link Orbit} object representing the final orbit.
+     */
+    // FIXME
+    public static Orbit calculateOrbitFromPositionAndVelocity(CelestialBody body, Position position, Vector velocity, long time) {
+        Orbit orbit = calculateOrbitFromPositionAndVelocity(body, position, velocity);
+
+        double meanAnomalyFromAngle = orbit.getMeanAnomalyFromAngle(position.getLongitude());
+
+        double actualAnomaly = orbit.getMeanAnomaly(time);
+
+        System.out.println("=========");
+
+        System.out.println(orbit.getMeanAnomalyFromAngle(orbit.getTrueAnomaly(time)));
+        System.out.println(normaliseAngle(orbit.getMeanAnomaly(time)));
+
+        System.out.println("=========");
+
+        orbit.meanAnomalyAtEpoch = normaliseAngle(actualAnomaly + meanAnomalyFromAngle);
+
+        System.out.println("Wanted M: " + meanAnomalyFromAngle);
+
+        System.out.println("Actual M: " + actualAnomaly);
+
+        return orbit;
+    }
+
+
+    /**
+     * Calculates the orbit around {@code body}, given the relative velocity and position from it.
      *
      * @param body     the reference body to calculate the orbit from.
      * @param position the position relative to the body.
      * @param velocity the velocity relative to the body.
      * @return the {@link Orbit} object representing the final orbit.
      */
-    // FIXME
-    @NotNull
+    // FIXME too
     public static Orbit calculateOrbitFromPositionAndVelocity(CelestialBody body, Position position, Vector velocity) {
-        boolean isEquatorial = false;
-
-        if (position.getZ() == 0 && velocity.getZ() == 0)
-            isEquatorial = true;
+        boolean isEquatorial = position.getZ() == 0 && velocity.getZ() == 0;
 
         Vector angularMomentum = position.crossProduct(velocity);
 
@@ -220,9 +250,10 @@ public final class Orbit {
 
         double eccentricity = eccentricityVector.getMagnitude();
 
-
         double longitudeOfAscendingNode = 0;
-        double argumentOfPeriapsis = 0;
+        double inclination = 0;
+        double argumentOfPeriapsis;
+
         if (!isEquatorial) {
             Vector zAxisUnitVector = new Vector(0, 0, 1);
 
@@ -234,27 +265,33 @@ public final class Orbit {
                 throw new RuntimeException("Longitude of ascending node is NaN!");
             }
 
-            argumentOfPeriapsis = acos(nodeAxisVector.dotProduct(eccentricityVector) / nodeAxisVector.getMagnitude() / eccentricity);
+            argumentOfPeriapsis = acos(nodeAxisVector.dotProduct(eccentricityVector)
+                    / nodeAxisVector.getMagnitude()
+                    / eccentricity);
+
+            if (Double.isNaN(argumentOfPeriapsis))
+                argumentOfPeriapsis = 0;
 
             if (nodeAxisVector.getY() < 0)
-                longitudeOfAscendingNode = PI * 2 - longitudeOfAscendingNode;
+                longitudeOfAscendingNode = TWO_PI - longitudeOfAscendingNode;
+
+            inclination = acos(angularMomentum.getZ() / angularMomentum.getMagnitude());
 
             System.out.println("Node axis " + nodeAxisVector);
 
             System.out.println("LoAN " + longitudeOfAscendingNode);
 
             System.out.println("AoP " + argumentOfPeriapsis);
+
+            System.out.println("Inclination " + inclination);
         } else {
-            longitudeOfAscendingNode = 0;
+            argumentOfPeriapsis = 0;
+            // TODO
         }
 
         double specificOrbitalEnergy = speedSquared / 2 - standardGravitationalParameter / distance;
 
         double semiMajorAxis = -standardGravitationalParameter / (2 * specificOrbitalEnergy);
-
-        double inclination = acos(angularMomentum.getZ() / angularMomentum.getMagnitude());
-
-        System.out.println("Inclination " + inclination);
 
         return new Orbit(
                 body,
@@ -426,8 +463,6 @@ public final class Orbit {
 
         double tangent = -atan2(1 - (eccentricity * eccentricity), tan(theta));
 
-        double PI_BY_TWO = PI / 2;
-
         if (-PI_BY_TWO < theta && theta < PI_BY_TWO) {
             tangent += PI;
         }
@@ -532,7 +567,7 @@ public final class Orbit {
     public double getVelocityAngle() {
         double trueAnomaly = getTrueAnomaly();
 
-        return trueAnomaly + PI / 2 + getVelocityAngle(trueAnomaly);
+        return trueAnomaly + PI_BY_TWO + getVelocityAngle(trueAnomaly);
     }
 
     /**
@@ -615,7 +650,9 @@ public final class Orbit {
             case CIRCULAR:
                 return theta;
             case ELLIPTICAL:
-                return acos2(cosOfEccentricAnomaly(theta), theta);
+                return acos(cosOfEccentricAnomaly(theta));
+            //return atan2(sqrt(1 - eccentricity * eccentricity) * sin(theta), eccentricity + cos(theta));
+            // TODO check performances of the two.
             case PARABOLIC:
                 return tan(theta / 2);
             case HYPERBOLIC:
@@ -824,8 +861,8 @@ public final class Orbit {
     public String toString() {
         return String.format(
                 "%s orbit around %s. Semi-major axis %f, Eccentricity %f",
-                getParent().getName(),
                 getOrbitType().toString().toLowerCase(),
+                getParent().getName(),
                 semiMajorAxis,
                 eccentricity
         );
@@ -898,7 +935,7 @@ public final class Orbit {
         CIRCULAR,
         /**
          * Elliptical orbit.
-         * Eccentricity < 1.
+         * Eccentricity &lt; 1.
          */
         ELLIPTICAL,
         /**
@@ -908,7 +945,7 @@ public final class Orbit {
         PARABOLIC,
         /**
          * Hyperbolic orbit.
-         * Eccentricity > 1.
+         * Eccentricity &gt; 1.
          */
         HYPERBOLIC
     }
