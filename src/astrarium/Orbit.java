@@ -519,58 +519,6 @@ public final class Orbit {
     }
 
     /**
-     * Returns the magnitude of the velocity in m/s at the given true anomaly {@code theta}.
-     *
-     * @param theta the angle between the reference body and the orbiting object.
-     * @return magnitude of the velocity.
-     */
-    @Deprecated
-    public double getVelocityAtAngleLegacy(double theta) {
-        switch (getOrbitType()) {
-            case CIRCULAR:
-                return getMeanVelocity();
-            case PARABOLIC:
-                return sqrt(STANDARD_GRAVITATIONAL_PARAMETER / getPeriapsis()) * (1 + cos(theta));
-            default:
-                return sqrt(
-                        STANDARD_GRAVITATIONAL_PARAMETER
-                                / getSemiLatusRectum()) *
-                        (1 + pow(eccentricity, 2) - 2 * cos(theta));
-        }
-    }
-
-    /**
-     * Get the angle of the velocity Position, perpendicular to the radial direction.
-     *
-     * @param theta true anomaly of the object
-     * @return the angle of the velocity
-     */
-    @Deprecated
-    public double getVelocityAngle(double theta) {
-        switch (getOrbitType()) {
-            case CIRCULAR:
-                return 0;
-            case PARABOLIC:
-                return theta / 2;
-            default:
-                // TODO Check if correct
-                return atan2(eccentricity * sin(theta), 1 + cos(theta));
-        }
-    }
-
-    /**
-     * Returns the the angle of the velocity.
-     *
-     * @return angle of the velocity vector.
-     */
-    @Deprecated
-    public double getVelocityAngle() {
-        double trueAnomaly = getTrueAnomaly();
-
-        return trueAnomaly + PI_BY_TWO + getVelocityAngle(trueAnomaly);
-    }
-
-    /**
      * Returns the magnitude of the velocity in m/s when the object was rendered with {@link #renderAtTime(long)}.
      * <p>
      * Note: this value is meaningless if retrieved before {@link #renderAtTime(long)} is launched!
