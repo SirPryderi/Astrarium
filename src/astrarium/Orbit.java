@@ -497,7 +497,7 @@ public final class Orbit {
      * @param radius the distance of the object from the center of mass of the reference body.
      * @return magnitude of the velocity.
      */
-    public double getVelocityAtRadius(double radius) {
+    public double getVelocityMagnitudeAtRadius(double radius) {
         switch (getOrbitType()) {
             case CIRCULAR:
                 return getMeanVelocity();
@@ -514,8 +514,8 @@ public final class Orbit {
      * @param theta the angle between the reference body and the orbiting object.
      * @return magnitude of the velocity.
      */
-    public double getVelocityAtAngle(double theta) {
-        return getVelocityAtRadius(getRadius(theta));
+    public double getVelocityMagnitudeAtAngle(double theta) {
+        return getVelocityMagnitudeAtRadius(getRadius(theta));
     }
 
     /**
@@ -525,8 +525,8 @@ public final class Orbit {
      *
      * @return rendered magnitude of the velocity.
      */
-    public double getVelocity() {
-        return getVelocityAtRadius(getRenderedPositionFromParent().getMagnitude());
+    public double getVelocityMagnitude() {
+        return getVelocityMagnitudeAtRadius(getRenderedPositionFromParent().getMagnitude());
     }
 
     /**

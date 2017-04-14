@@ -334,7 +334,7 @@ public class SpaceCanvas extends Canvas {
 
         angle = angle + celestialBody.getOrbit().getLongitudeOfAscendingNode();
 
-        double magnitude = celestialBody.getOrbit().getVelocity() / 10000;
+        double magnitude = celestialBody.getOrbit().getVelocityMagnitude() / 10000;
 
         getGraphicsContext2D().strokeLine(0, 0, Math.cos(angle) * magnitude, Math.sin(angle) * magnitude);
 
