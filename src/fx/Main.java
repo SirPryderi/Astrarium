@@ -18,6 +18,11 @@ import java.io.IOException;
  */
 public class Main extends Application {
 
+    /**
+     * Starts the JavaFX application.
+     *
+     * @param args commands line arguments. No args used so far.
+     */
     public static void main(String[] args) {
         launch(args);
     }

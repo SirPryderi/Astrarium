@@ -31,29 +31,65 @@ import java.util.Date;
  * @author Vittorio
  */
 public class MainController {
+    /**
+     * The model of the application. Is made static to be accessed by other components in a singleton-like fashion.
+     */
     public static Astrarium astrarium;
 
     //region FXML Nodes
+    /**
+     * The menu bar.
+     */
     @FXML
     public MenuBar menu;
+    /**
+     * The main grid of the UI.
+     */
     @FXML
-    public HBox gameGrid;
+    public HBox grid;
+    /**
+     * The {@link SpaceCanvas} that contains the system map.
+     */
     @FXML
     public SpaceCanvas canvas;
+    /**
+     * The {@link DatePicker} used to set the time of the simulation.
+     */
     @FXML
     public DatePicker datePicker;
+    /**
+     * The field representing the hour.
+     */
     @FXML
     public Spinner hoursField;
+    /**
+     * The field representing the minutes.
+     */
     @FXML
     public Spinner minutesField;
+    /**
+     * The side hierarchical tree view of the system.
+     */
     @FXML
     public TreeView<CelestialBody> navigationTree;
     //endregion
 
+    //region Animation
+    /**
+     * The timer orchestrating the animation of the {@link SpaceCanvas} map.
+     */
     private CanvasAnimationTimer canvasAnimationTimer;
+    /**
+     * The time of the simulation.
+     */
     private long time = new Date().getTime();
+    //endregion
 
     //region Constructor
+
+    /**
+     * Loads the default map and initialises the UI.
+     */
     public MainController() {
         try {
             astrarium = new Astrarium(JsonHub.importDefaultMap("SolSystem"));
@@ -66,11 +102,20 @@ public class MainController {
     //endregion Constructor
 
     //region Initialisers
+
+    /**
+     * Asynchronously initialise the UI after every component has been loaded.
+     *
+     * @see MainController#initUI()
+     */
     @FXML
     public void initialize() {
         Platform.runLater(this::initUI);
     }
 
+    /**
+     * Actual UI initialisation.
+     */
     private void initUI() {
         initMenu();
         initCanvas();
@@ -78,6 +123,9 @@ public class MainController {
         initAnimationTimer();
     }
 
+    /**
+     * Populates the navigation tree with the bodies inside the {@link Astrarium}.
+     */
     private void initNavigationTree() {
         TreeItem<CelestialBody> root = new TreeItem<>(astrarium.getRoot());
 
@@ -94,6 +142,12 @@ public class MainController {
         });
     }
 
+    /**
+     * Adds the children of the body to the navigation tree.
+     *
+     * @param parentBody the parent celestial body
+     * @param parentNode the parent node where to attach the nested tree view.
+     */
     private void addToTree(CelestialBody parentBody, TreeItem<CelestialBody> parentNode) {
         for (CelestialBody childBody : parentBody.getChildren()) {
             TreeItem<CelestialBody> childNode = new TreeItem<>(childBody);
@@ -104,6 +158,9 @@ public class MainController {
         }
     }
 
+    /**
+     * Initialises the file menu with the default actions.
+     */
     private void initMenu() {
         ((CheckMenuItem) (menu.getMenus().get(3).getItems().get(0))).selectedProperty().bindBidirectional(canvas.showOrbit);
         ((CheckMenuItem) (menu.getMenus().get(3).getItems().get(1))).selectedProperty().bindBidirectional(canvas.showNames);
@@ -113,6 +170,9 @@ public class MainController {
         ((CheckMenuItem) (menu.getMenus().get(3).getItems().get(5))).selectedProperty().bindBidirectional(canvas.showMarkers);
     }
 
+    /**
+     * Initiates the 2D map, binding its sizes and creating interactions.
+     */
     private void initCanvas() {
         Window window = canvas.getScene().getWindow();
 
@@ -131,6 +191,9 @@ public class MainController {
         canvas.setTime(time);
     }
 
+    /**
+     * Initialises and stars the animation timer.
+     */
     private void initAnimationTimer() {
         datePicker.setValue(LocalDate.now());
 
@@ -152,11 +215,18 @@ public class MainController {
     //endregion Initialisers
 
     //region Handlers
+
+    /**
+     * Handles action happening when the date picker is changed.
+     */
     @FXML
     public void datePickerActionHandler() {
         // TODO
     }
 
+    /**
+     * Opens a pop-up to load a save file.
+     */
     @FXML
     public void loadFile() {
         canvasAnimationTimer.stop();
@@ -196,6 +266,9 @@ public class MainController {
         canvasAnimationTimer.start();
     }
 
+    /**
+     * Opens a pop-up to create a new body.
+     */
     @FXML
     public void newBody() {
         Modal orbit = new BodyModal();
@@ -205,6 +278,9 @@ public class MainController {
     }
     //endregion
 
+    /**
+     * An inner class that defines the animation behaviour of the SpaceCanvas.
+     */
     private class CanvasAnimationTimer extends AnimationTimer {
         @SuppressWarnings("unchecked")
         @Override

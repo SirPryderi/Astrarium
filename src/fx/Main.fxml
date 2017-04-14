@@ -34,7 +34,7 @@
         </Menu>
     </MenuBar>
 
-    <HBox fx:id="gameGrid" VBox.vgrow="ALWAYS">
+    <HBox fx:id="grid" VBox.vgrow="ALWAYS">
         <ScrollPane minWidth="250" hbarPolicy="NEVER">
 
             <VBox alignment="TOP_CENTER">
