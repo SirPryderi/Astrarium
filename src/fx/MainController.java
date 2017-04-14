@@ -179,8 +179,6 @@ public class MainController {
         canvas.widthProperty().bind(window.widthProperty());
         canvas.heightProperty().bind(window.heightProperty());
 
-        canvas.makeCanvasDraggable();
-
         Parent parent = canvas.getParent();
 
         canvas.widthProperty().bind(((Pane) parent).widthProperty());
