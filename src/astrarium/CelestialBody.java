@@ -163,7 +163,7 @@ public class CelestialBody extends Body {
 
         double angle = position.getLongitude() + PI_BY_TWO;
 
-        Vector velocity = new Vector(speed, 0, 10);
+        Vector velocity = new Vector(speed, 0, 0);
 
         velocity.rotateZ(angle);
 
