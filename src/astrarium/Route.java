@@ -19,7 +19,7 @@ public class Route {
     private final Spacecraft spacecraft;
 
     /**
-     * The orbit at the beginning of the this Route.
+     * The orbit at the beginning of this Route.
      */
     private final Orbit startOrbit;
 

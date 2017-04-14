@@ -5,7 +5,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * A class that wraps all the other objects of the simulation.
  * <p>
- * It is possible to forward the state of the whole system at a defined time using {@link #setTime(long)}.
+ * It is possible to forward the state of the entire system at a defined time using {@link #setTime(long)}.
  * <p>
  * Created on 20/02/2017.
  *
