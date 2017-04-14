@@ -1,5 +1,7 @@
 package astrarium.utils;
 
+import static java.lang.Math.*;
+
 /**
  * A utility class containing often-used mathematical utilities.
  * <p>
@@ -8,6 +10,10 @@ package astrarium.utils;
  * @author Vittorio
  */
 public final class Mathematics {
+    public final static double PI_BY_TWO = 1.5707963267948966;
+    public final static double TWO_PI = 6.283185307179586;
+    public final static double THREE_HALVES_PI = 4.71238898038469;
+
     /**
      * Makes the class non-instantiable.
      */
@@ -55,9 +61,8 @@ public final class Mathematics {
      * @return normalise angle.
      */
     public static double normaliseAngle(double angle) {
-        if (Math.abs(angle) <= Math.PI) return angle;
+        if (abs(angle) <= PI) return angle;
 
-        final double TWO_PI = Math.PI * 2;
-        return angle - TWO_PI * Math.floor((angle + Math.PI) / TWO_PI);
+        return angle - (TWO_PI * floor((angle + PI) / TWO_PI));
     }
 }

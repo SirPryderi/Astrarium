@@ -7,7 +7,7 @@ import com.sun.istack.internal.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-import static java.lang.Math.PI;
+import static astrarium.utils.Mathematics.PI_BY_TWO;
 import static java.lang.Math.sqrt;
 
 /**
@@ -161,7 +161,7 @@ public class CelestialBody extends Body {
     public Vector getCirculaOrbitVelocity(Position position) {
         double speed = sqrt(this.getStandardGravitationalParameter() / position.getMagnitude());
 
-        double angle = position.getLongitude() + PI / 2;
+        double angle = position.getLongitude() + PI_BY_TWO;
 
         Vector velocity = new Vector(speed, 0, 10);
 
