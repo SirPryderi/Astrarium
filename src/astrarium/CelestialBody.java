@@ -158,7 +158,7 @@ public class CelestialBody extends Body {
      * @param position the position of the spacecraft.
      * @return The velocity relative to the body that the object must reach to be in a circular orbit.
      */
-    public Vector getCirculaOrbitVelocity(Position position) {
+    public Vector getCircularOrbitVelocity(Position position) {
         double speed = sqrt(this.getStandardGravitationalParameter() / position.getMagnitude());
 
         double angle = position.getLongitude() + PI_BY_TWO;
@@ -175,11 +175,9 @@ public class CelestialBody extends Body {
      * Adds a {@link CelestialBody} as a child of the current body.
      *
      * @param celestialBody the body to add.
-     * @return true if successfully added | false in case of error.
      */
-    @SuppressWarnings("UnusedReturnValue")
-    public boolean addChild(CelestialBody celestialBody) {
-        return this.children.add(celestialBody);
+    private void addChild(CelestialBody celestialBody) {
+        this.children.add(celestialBody);
     }
 
     @Override
