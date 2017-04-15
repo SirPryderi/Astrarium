@@ -177,9 +177,6 @@ public class Vector {
 
         this.setValues(x, y * c - z * s, z * c + y * s);
     }
-    //endregion Rotation
-
-    //region Operations
 
     /**
      * Rotates a vector along {@code axis} of the amount of {@code theta}.
@@ -288,9 +285,6 @@ public class Vector {
         setValues(this.getX() + vector.getX(), this.getY() + vector.getY(), this.getZ() + vector.getZ());
         return this;
     }
-    //endregion Operations
-
-    //region Getters and Setters
 
     /**
      * Subtract the second {@link Vector} form the first one.
@@ -303,6 +297,19 @@ public class Vector {
     public Vector minus(Vector vector) {
         setValues(this.getX() - vector.getX(), this.getY() - vector.getY(), this.getZ() - vector.getZ());
         return this;
+    }
+
+    /**
+     * Returns the angle between the first vector, the origin and the second vector.
+     *
+     * @param vector other side of the angle.
+     * @return the angle with vertex in the origin in radians.
+     */
+    public double getAngleWith(Vector vector) {
+        Vector v1 = this.getNormalisedVector();
+        Vector v2 = vector.getNormalisedVector();
+
+        return acos(v1.dotProduct(v2));
     }
     //endregion Operations
 
