@@ -4,6 +4,7 @@ import astrarium.utils.Mathematics;
 import astrarium.utils.Position;
 import astrarium.utils.Vector;
 import org.jetbrains.annotations.NotNull;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.Date;
 
@@ -529,7 +530,8 @@ public final class Orbit {
         }
     }
 
-//    public Vector getVelocityAtAtAngle(double theta) {
+
+    public Vector getVelocityAtAtAngle(double theta) {
 //        Vector velocity = Vector.getDirectionVector(getTangentAngleFromRadius());
 //
 //        velocity.multiplied(getVelocityMagnitudeAtAngle(theta));
@@ -537,7 +539,9 @@ public final class Orbit {
 //        velocity = rotateOnOrbitalPlane(velocity);
 //
 //        return velocity;
-//    }
+        // TODO
+        throw new NotImplementedException();
+    }
 
     /**
      * Returns the magnitude of the velocity in m/s at the given true anomaly {@code theta}.
