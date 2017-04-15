@@ -309,7 +309,13 @@ public class Vector {
         Vector v1 = this.getNormalisedVector();
         Vector v2 = vector.getNormalisedVector();
 
-        return acos(v1.dotProduct(v2));
+        double dotProduct = v1.dotProduct(v2);
+        Vector crossProduct = v1.crossProduct(v2);
+
+        // Fail-safe that prevents the next statement to be null with values close to 1.
+        if (dotProduct > 1) dotProduct = 1;
+
+        return acos(dotProduct) * Math.signum(crossProduct.getZ());
     }
     //endregion Operations
 
