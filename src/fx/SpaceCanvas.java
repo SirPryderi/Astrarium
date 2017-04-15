@@ -17,6 +17,7 @@ import java.util.Random;
 
 import static astrarium.utils.Mathematics.TWO_PI;
 import static java.lang.Math.PI;
+import static java.lang.Math.random;
 
 /**
  * An extension of the standard JavaFX {@link Canvas}, capable of showing an {@link Astrarium} to screen.
@@ -172,9 +173,10 @@ public class SpaceCanvas extends Canvas {
             drawTangentVector(celestialBody);
 
         celestialBody.getChildren().forEach(children -> {
-            if (showOrbit.get())
+            if (showOrbit.get()) {
+                getGraphicsContext2D().setStroke(Colors.hashColor(children.getName()));
                 drawOrbit(children.getOrbit());
-
+            }
             drawPlanet(children);
         });
 
@@ -455,6 +457,14 @@ public class SpaceCanvas extends Canvas {
             CelestialBody body = astrarium.getRoot();
 
             Vector velocity = body.getCircularOrbitVelocity(position);
+
+//            Vector axis = new Vector(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5);
+//
+            double angle = random() * TWO_PI;
+//
+//            velocity.rotate(axis, angle);
+
+            velocity.rotateZ(angle);
 
             Orbit orbit = Orbit.calculateOrbitFromPositionAndVelocity(astrarium.getRoot(), position, velocity, getTime());
 
