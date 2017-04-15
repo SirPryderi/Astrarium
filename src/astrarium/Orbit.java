@@ -209,24 +209,28 @@ public final class Orbit {
 
         //orbit.renderAtTime(time);
 
-        double meanAnomalyFromAngle = position.getLongitude();
+        double meanAnomalyFromAngle = orbit.getMeanAnomalyFromAngle(orbit.getPeriapsisPosition().getAngleWith(position));
 
         double actualAnomaly = normaliseAngle(orbit.getMeanAnomaly(time));
 
-        System.out.println("=========");
+//        System.out.println("=========");
+//
+//        System.out.println(orbit.getMeanAnomalyFromAngle(orbit.getTrueAnomaly(time)));
+//        System.out.println(normaliseAngle(orbit.getMeanAnomaly(time)));
+//
+//        System.out.println("=========");
 
-        System.out.println(orbit.getMeanAnomalyFromAngle(orbit.getTrueAnomaly(time)));
-        System.out.println(normaliseAngle(orbit.getMeanAnomaly(time)));
-
-        System.out.println("=========");
-
-        orbit.meanAnomalyAtEpoch = normaliseAngle(meanAnomalyFromAngle - actualAnomaly);
+        // TODO remove debug output
 
         System.out.println("Wanted M: " + Math.toDegrees(meanAnomalyFromAngle));
 
         System.out.println("Actual M: " + Math.toDegrees(actualAnomaly));
 
-        System.out.println("Actual T: " + Math.toDegrees(normaliseAngle(orbit.getTrueAnomaly(time))));
+        orbit.meanAnomalyAtEpoch = normaliseAngle(meanAnomalyFromAngle - actualAnomaly);
+
+        System.out.println("Final M: " + Math.toDegrees(normaliseAngle(orbit.getMeanAnomaly(time))));
+        System.out.println("Final T: " + Math.toDegrees(normaliseAngle(orbit.getTrueAnomaly(time))));
+
 
         Date date = new Date();
         date.setTime(time);
@@ -307,7 +311,8 @@ public final class Orbit {
 
             System.out.println("Inclination " + inclination);
         } else {
-            argumentOfPeriapsis = 0;
+            if (eccentricity != 0)
+                argumentOfPeriapsis = eccentricityVector.getLongitude();
             // TODO
         }
 
@@ -633,8 +638,8 @@ public final class Orbit {
             case CIRCULAR:
                 return theta;
             case ELLIPTICAL:
-                return acos(cosOfEccentricAnomaly(theta));
-            //return atan2(sqrt(1 - eccentricity * eccentricity) * sin(theta), eccentricity + cos(theta));
+                //    return acos(cosOfEccentricAnomaly(theta));
+                return atan2(sqrt(1 - eccentricity * eccentricity) * sin(theta), eccentricity + cos(theta));
             // TODO check performances of the two.
             case PARABOLIC:
                 return tan(theta / 2);
@@ -901,13 +906,22 @@ public final class Orbit {
     //region To String
     @Override
     public String toString() {
-        return String.format(
-                "%s orbit around %s. Semi-major axis %f, Eccentricity %f",
-                getOrbitType().toString().toLowerCase(),
-                getParent().getName(),
-                semiMajorAxis,
-                eccentricity
-        );
+        switch (getOrbitType()) {
+            case CIRCULAR:
+                return String.format(
+                        "Circular orbit around %s. Radius %.2f km.",
+                        getParent().getName(),
+                        semiMajorAxis / 1000);
+            case ELLIPTICAL:
+                return String.format(
+                        "Elliptical orbit around %s. Semi-major axis: %.2f km. Eccentricity: %.4f",
+                        getParent().getName(),
+                        semiMajorAxis / 1000,
+                        eccentricity);
+            default:
+                return "Very odd orbit.";
+        }
+
     }
     //endregion ToString
 
