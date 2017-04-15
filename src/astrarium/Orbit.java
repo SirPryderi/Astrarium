@@ -1,8 +1,11 @@
 package astrarium;
 
+import astrarium.utils.Mathematics;
 import astrarium.utils.Position;
 import astrarium.utils.Vector;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Date;
 
 import static astrarium.utils.Mathematics.*;
 import static java.lang.Math.*;
@@ -203,9 +206,11 @@ public final class Orbit {
     public static Orbit calculateOrbitFromPositionAndVelocity(CelestialBody body, Position position, Vector velocity, long time) {
         Orbit orbit = calculateOrbitFromPositionAndVelocity(body, position, velocity);
 
-        double meanAnomalyFromAngle = orbit.getMeanAnomalyFromAngle(position.getLongitude());
+        //orbit.renderAtTime(time);
 
-        double actualAnomaly = orbit.getMeanAnomaly(time);
+        double meanAnomalyFromAngle = position.getLongitude();
+
+        double actualAnomaly = normaliseAngle(orbit.getMeanAnomaly(time));
 
         System.out.println("=========");
 
@@ -214,11 +219,18 @@ public final class Orbit {
 
         System.out.println("=========");
 
-        orbit.meanAnomalyAtEpoch = normaliseAngle(actualAnomaly + meanAnomalyFromAngle);
+        orbit.meanAnomalyAtEpoch = normaliseAngle(meanAnomalyFromAngle - actualAnomaly);
 
-        System.out.println("Wanted M: " + meanAnomalyFromAngle);
+        System.out.println("Wanted M: " + Math.toDegrees(meanAnomalyFromAngle));
 
-        System.out.println("Actual M: " + actualAnomaly);
+        System.out.println("Actual M: " + Math.toDegrees(actualAnomaly));
+
+        System.out.println("Actual T: " + Math.toDegrees(normaliseAngle(orbit.getTrueAnomaly(time))));
+
+        Date date = new Date();
+        date.setTime(time);
+
+        System.out.println(date);
 
         return orbit;
     }
@@ -234,7 +246,7 @@ public final class Orbit {
      */
     // FIXME too
     public static Orbit calculateOrbitFromPositionAndVelocity(CelestialBody body, Position position, Vector velocity) {
-        boolean isEquatorial = position.getZ() == 0 && velocity.getZ() == 0;
+        boolean isEquatorial = Mathematics.equals(position.getZ(), 0) && Mathematics.equals(velocity.getZ(), 0);
 
         Vector angularMomentum = position.crossProduct(velocity);
 
@@ -250,11 +262,18 @@ public final class Orbit {
 
         double eccentricity = eccentricityVector.getMagnitude();
 
+        if (Mathematics.equals(eccentricity, 0))
+            eccentricity = 0;
+
         double longitudeOfAscendingNode = 0;
         double inclination = 0;
-        double argumentOfPeriapsis;
+        double argumentOfPeriapsis = 0;
+
+        System.out.println("\n\n ++++");
 
         if (!isEquatorial) {
+            System.out.println("Not equatorial");
+
             Vector zAxisUnitVector = new Vector(0, 0, 1);
 
             Vector nodeAxisVector = zAxisUnitVector.crossProduct(angularMomentum);
@@ -265,15 +284,17 @@ public final class Orbit {
                 throw new RuntimeException("Longitude of ascending node is NaN!");
             }
 
-            argumentOfPeriapsis = acos(nodeAxisVector.dotProduct(eccentricityVector)
-                    / nodeAxisVector.getMagnitude()
-                    / eccentricity);
-
-            if (Double.isNaN(argumentOfPeriapsis))
-                argumentOfPeriapsis = 0;
-
             if (nodeAxisVector.getY() < 0)
                 longitudeOfAscendingNode = TWO_PI - longitudeOfAscendingNode;
+
+            if (eccentricity != 0) {
+                argumentOfPeriapsis = acos(nodeAxisVector.dotProduct(eccentricityVector)
+                        / nodeAxisVector.getMagnitude()
+                        / eccentricity);
+
+                if (Double.isNaN(argumentOfPeriapsis))
+                    argumentOfPeriapsis = 0;
+            }
 
             inclination = acos(angularMomentum.getZ() / angularMomentum.getMagnitude());
 
@@ -508,6 +529,16 @@ public final class Orbit {
         }
     }
 
+//    public Vector getVelocityAtAtAngle(double theta) {
+//        Vector velocity = Vector.getDirectionVector(getTangentAngleFromRadius());
+//
+//        velocity.multiplied(getVelocityMagnitudeAtAngle(theta));
+//
+//        velocity = rotateOnOrbitalPlane(velocity);
+//
+//        return velocity;
+//    }
+
     /**
      * Returns the magnitude of the velocity in m/s at the given true anomaly {@code theta}.
      *
@@ -617,7 +648,7 @@ public final class Orbit {
      * @return the mean anomaly in radians.
      */
     public double getMeanAnomaly(long time) {
-        return sqrt(STANDARD_GRAVITATIONAL_PARAMETER / pow(semiMajorAxis, 3)) * (time / 1000D) + meanAnomalyAtEpoch;
+        return (sqrt(STANDARD_GRAVITATIONAL_PARAMETER / pow(semiMajorAxis, 3)) * (time / 1000D)) + meanAnomalyAtEpoch;
     }
 
     /**
@@ -771,6 +802,9 @@ public final class Orbit {
 
         return new Position(x, y);
     }
+    //endregion Positions
+
+    //region Plane Rotations
 
     /**
      * Converts a {@link Position} from the orbital plane to the reference plane,
@@ -779,10 +813,23 @@ public final class Orbit {
      * Note: the original position is not altered.
      *
      * @param position position to rotate
-     * @return the rotate position.
+     * @return the rotated position.
      */
     public Position rotatePositionOnOrbitalPlane(@NotNull Position position) {
-        Position rotatedPosition = position.getCopy();
+        return (Position) rotateOnOrbitalPlane(position);
+    }
+
+    /**
+     * Converts a {@link Vector} from the orbital plane to the reference plane,
+     * applying the three orbital rotations.
+     * <p>
+     * Note: the original vector is not altered.
+     *
+     * @param vector position to rotate
+     * @return the rotated vector.
+     */
+    public Vector rotateOnOrbitalPlane(@NotNull Vector vector) {
+        Vector rotatedVector = vector.getCopy();
 
         if (inclination != 0) {
             Vector nodeAxis = Vector.getDirectionVector(longitudeOfAscendingNode);
@@ -792,17 +839,17 @@ public final class Orbit {
             //normalAxis.rotateZ(longitudeOfAscendingNode - PI / 2);
             // TODO the normal axis calculation seems to be okay, but there might be a better way of finding it.
 
-            rotatedPosition.rotate(nodeAxis, inclination);
-            rotatedPosition.rotateZ(longitudeOfAscendingNode);
-            rotatedPosition.rotate(normalAxis, argumentOfPeriapsis);
+            rotatedVector.rotate(nodeAxis, inclination);
+            rotatedVector.rotateZ(longitudeOfAscendingNode);
+            rotatedVector.rotate(normalAxis, argumentOfPeriapsis);
         } else {
-            rotatedPosition.rotateZ(longitudeOfAscendingNode + argumentOfPeriapsis);
+            rotatedVector.rotateZ(longitudeOfAscendingNode + argumentOfPeriapsis);
             // AKA longitude of periapsis
         }
 
-        return rotatedPosition;
+        return rotatedVector;
     }
-    //endregion Positions
+    //endregion
 
     //region To String
     @Override
