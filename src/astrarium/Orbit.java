@@ -808,6 +808,49 @@ public final class Orbit {
     }
     //endregion Positions
 
+    //region Nodes
+
+    /**
+     * Returns the coordinates of the Periapsis from the parent body.
+     *
+     * @return periapsis coordinates,
+     */
+    public Position getPeriapsisPosition() {
+        return rotatePositionOnOrbitalPlane(new Position(getSemiMajorAxis() - getFocusDistance(), 0));
+    }
+
+    /**
+     * Returns the coordinates of the Apoapsis from the parent body.
+     *
+     * @return apoapsis coordinates.
+     */
+    public Position getApoapsisPosition() {
+        return rotatePositionOnOrbitalPlane(new Position(-getSemiMajorAxis() - getFocusDistance(), 0));
+    }
+
+    /**
+     * Returns the coordinates of the northern intersection
+     * between the semi-minor axis and the orbit.
+     * The coordinates are relative to the parent body.
+     *
+     * @return northern node coordinates.
+     */
+    public Position getNorthernVertex() {
+        return rotatePositionOnOrbitalPlane(new Position(-getFocusDistance(), getSemiMinorAxis()));
+    }
+
+    /**
+     * Returns the coordinates of the southern intersection
+     * between the semi-minor axis and the orbit.
+     * The coordinates are relative to the parent body.
+     *
+     * @return northern node coordinates.
+     */
+    public Position getSouthernVertex() {
+        return rotatePositionOnOrbitalPlane(new Position(-getFocusDistance(), -getSemiMinorAxis()));
+    }
+    //endregion
+
     //region Plane Rotations
 
     /**
