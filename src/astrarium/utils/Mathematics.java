@@ -10,8 +10,17 @@ import static java.lang.Math.*;
  * @author Vittorio
  */
 public final class Mathematics {
+    /**
+     * Value of  &pi;/2.
+     */
     public final static double PI_BY_TWO = 1.5707963267948966;
+    /**
+     * Value of  &pi; * 2.
+     */
     public final static double TWO_PI = 6.283185307179586;
+    /**
+     * Value of  &pi; 3/2.
+     */
     public final static double THREE_HALVES_PI = 4.71238898038469;
 
     /**
@@ -64,5 +73,28 @@ public final class Mathematics {
         if (abs(angle) <= PI) return angle;
 
         return angle - (TWO_PI * floor((angle + PI) / TWO_PI));
+    }
+
+    /**
+     * Compares two doubles to check for equality with a given delta.
+     *
+     * @param a       first double to compare.
+     * @param b       second double to compare.
+     * @param epsilon desired precision, e.g. 0.001.
+     * @return true if they are the same according two the epsilon, false otherwise.
+     */
+    public static boolean equals(double a, double b, double epsilon) {
+        return (Math.abs(a - b) < epsilon);
+    }
+
+    /**
+     * Compares two doubles to check for equality with a precision of 1E-5.
+     *
+     * @param a first double to compare.
+     * @param b second double to compare.
+     * @return true if their difference is less then 1E-5, false otherwise.
+     */
+    public static boolean equals(double a, double b) {
+        return equals(a, b, 1E-5);
     }
 }
