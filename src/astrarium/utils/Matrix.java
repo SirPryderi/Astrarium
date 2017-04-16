@@ -26,6 +26,16 @@ public class Matrix {
     }
 
     /**
+     * Creates an empty matrix with the given sizes.
+     *
+     * @param x width of the matrix
+     * @param y height of the matrix.
+     */
+    public Matrix(int x, int y) {
+        this(new double[y][x]);
+    }
+
+    /**
      * Returns the rotation matrix around an axis defined as a vector and the angle theta.
      *
      * @param axis  the normalised axis vector.
@@ -101,12 +111,52 @@ public class Matrix {
     }
 
     /**
+     * Removes one element from the array.
+     *
+     * @param a   array.
+     * @param del index to remove.
+     * @return returns the array without the removed element.
+     */
+    public static double[] removeElement(double[] a, int del) {
+        double b[] = new double[a.length - 1];
+        System.arraycopy(a, 0, b, 0, del);
+        System.arraycopy(a, del + 1, b, del, a.length - del - 1);
+        return b;
+    }
+
+    /**
      * Returns the determinant of the matrix. Hopefully.
      *
      * @return the determinant of the matrix.
      */
     public double getDeterminant() {
         return Matrix.getDeterminant(this.matrix, this.matrix.length);
+    }
+
+    /**
+     * Return the minors of the matrix.
+     * <p>
+     * The matrix must be of sizes n - 1 by n.
+     *
+     * @return the minors of the matrix.
+     */
+    public double[] getMinors() {
+        if (matrix[0].length != matrix.length + 1)
+            throw new IllegalArgumentException();
+
+        int order = matrix[0].length - 1;
+
+        int count = matrix[0].length;
+
+        double[] minors = new double[count];
+
+        for (int i = 0; i < count; i++) {
+            Matrix submatrix = new Matrix(order, order);
+            for (int y = 0; y < matrix.length; y++) submatrix.matrix[y] = removeElement(matrix[y], i);
+            minors[i] = submatrix.getDeterminant();
+        }
+
+        return minors;
     }
 
     /**
