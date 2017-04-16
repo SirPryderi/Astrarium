@@ -1,5 +1,7 @@
 package astrarium.utils;
 
+import static java.lang.Math.pow;
+
 /**
  * A class representing the mathematical entity of a matrix. Provides facilities for the most used operations.
  * <p>
@@ -54,6 +56,57 @@ public class Matrix {
                 {xy * oneMinusCosTheta + z * sinTheta, cosTheta + ySquared * oneMinusCosTheta, yz * oneMinusCosTheta - x * sinTheta},
                 {xz * oneMinusCosTheta - y * sinTheta, yz * oneMinusCosTheta + x * sinTheta, cosTheta + zSquared * oneMinusCosTheta}
         });
+    }
+
+    /**
+     * Returns the determinant of the matrix.
+     *
+     * @param a the matrix.
+     * @param n size of the matrix.
+     * @return the determinant of the matrix.
+     */
+    private static double getDeterminant(double a[][], int n) {
+        double det = 0;
+
+        int p, h, k, i, j;
+
+        double[][] temp = new double[a.length][a[1].length];
+
+        if (n == 1) {
+            return a[0][0];
+        } else if (n == 2) {
+            det = (a[0][0] * a[1][1] - a[0][1] * a[1][0]);
+            return det;
+        } else {
+            for (p = 0; p < n; p++) {
+                h = 0;
+                k = 0;
+                for (i = 1; i < n; i++) {
+                    for (j = 0; j < n; j++) {
+                        if (j == p) {
+                            continue;
+                        }
+                        temp[h][k] = a[i][j];
+                        k++;
+                        if (k == n - 1) {
+                            h++;
+                            k = 0;
+                        }
+                    }
+                }
+                det = det + a[0][p] * pow(-1, p) * getDeterminant(temp, n - 1);
+            }
+            return det;
+        }
+    }
+
+    /**
+     * Returns the determinant of the matrix. Hopefully.
+     *
+     * @return the determinant of the matrix.
+     */
+    public double getDeterminant() {
+        return Matrix.getDeterminant(this.matrix, this.matrix.length);
     }
 
     /**
