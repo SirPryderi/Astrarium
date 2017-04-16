@@ -770,6 +770,23 @@ public final class Orbit {
     }
 
     /**
+     * * Returns the position from the reference body at a given the true anomaly {@code theta} in radians.
+     *
+     * @param theta true anomaly in radians.
+     * @return position of the orbiting object.
+     */
+    @NotNull
+    public Position getPositionFromParentAtAngle(double theta) {
+        Position position = new Position();
+
+        position.setValues(Position.getDirectionVector(theta));
+
+        position.multiplied(getRadius(theta));
+
+        return rotatePositionOnOrbitalPlane(position);
+    }
+
+    /**
      * Returns the position from the reference body when {@link #renderAtTime(long)} was launched.
      *
      * @return the position of the orbiting body.
