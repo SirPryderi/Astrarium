@@ -209,7 +209,9 @@ public final class Orbit {
 
         //orbit.renderAtTime(time);
 
-        double meanAnomalyFromAngle = orbit.getMeanAnomalyFromAngle(orbit.getPeriapsisPosition().getAngleWith(position));
+        double trueAnomaly = orbit.getPeriapsisPosition().getAngleWith(position);
+
+        double meanAnomalyFromAngle = orbit.getMeanAnomalyFromAngle(trueAnomaly);
 
         double actualAnomaly = normaliseAngle(orbit.getMeanAnomaly(time));
 
@@ -821,7 +823,7 @@ public final class Orbit {
      * @return periapsis coordinates,
      */
     public Position getPeriapsisPosition() {
-        return rotatePositionOnOrbitalPlane(new Position(getSemiMajorAxis() - getFocusDistance(), 0));
+        return rotatePositionOnOrbitalPlane(new Position(getPeriapsis(), 0));
     }
 
     /**
@@ -830,7 +832,7 @@ public final class Orbit {
      * @return apoapsis coordinates.
      */
     public Position getApoapsisPosition() {
-        return rotatePositionOnOrbitalPlane(new Position(-getSemiMajorAxis() - getFocusDistance(), 0));
+        return rotatePositionOnOrbitalPlane(new Position(-getApoapsis(), 0));
     }
 
     /**
@@ -853,6 +855,17 @@ public final class Orbit {
      */
     public Position getSouthernVertex() {
         return rotatePositionOnOrbitalPlane(new Position(-getFocusDistance(), -getSemiMinorAxis()));
+    }
+
+    /**
+     * Returns the coordinates of the center,
+     * or the intersection between the two axis.
+     * The coordinates are relative to the parent body.
+     *
+     * @return ellipse center coordinates.
+     */
+    public Position getCenter() {
+        return rotatePositionOnOrbitalPlane(new Position(-getFocusDistance(), 0));
     }
     //endregion
 
