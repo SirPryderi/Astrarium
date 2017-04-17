@@ -86,7 +86,22 @@
         "argumentOfPeriapsis": 4.776399934492021,
         "meanAnomalyAtEpoch": 3.3152948526009576
       },
-      "children": []
+      "children": [
+        {
+          "name": "Callisto",
+          "mass": 1.075938E23,
+          "radius": 2.4103E6,
+          "orbit": {
+            "semiMajorAxis": 1.8E9,
+            "eccentricity": 0.0074,
+            "inclination": 0.035203291,
+            "longitudeOfAscendingNode": 0,
+            "argumentOfPeriapsis": 0,
+            "meanAnomalyAtEpoch": 0
+          },
+          "children": []
+        }
+      ]
     },
     {
       "name": "Saturn",
