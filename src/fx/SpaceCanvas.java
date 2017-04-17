@@ -3,21 +3,26 @@ package fx;
 import astrarium.Astrarium;
 import astrarium.CelestialBody;
 import astrarium.Orbit;
-import astrarium.utils.Conversion;
+import astrarium.utils.Mathematics;
 import astrarium.utils.Position;
 import astrarium.utils.Vector;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.geometry.Point3D;
 import javafx.scene.Cursor;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.paint.Color;
 import javafx.scene.text.TextAlignment;
+import javafx.scene.transform.Affine;
+import javafx.scene.transform.Rotate;
+import javafx.scene.transform.Transform;
 
+import java.util.HashMap;
 import java.util.Random;
 
 import static astrarium.utils.Mathematics.TWO_PI;
-import static java.lang.Math.PI;
 import static java.lang.Math.random;
+import static java.lang.Math.toDegrees;
 
 /**
  * An extension of the standard JavaFX {@link Canvas}, capable of showing an {@link Astrarium} to screen.
@@ -70,6 +75,8 @@ public class SpaceCanvas extends Canvas {
      */
     private Position offset = new Position();
     //endregion
+
+    private HashMap<Orbit, Position[]> orbitsCache = new HashMap<>();
 
     /**
      * {@inheritDoc}
@@ -189,16 +196,50 @@ public class SpaceCanvas extends Canvas {
      * @param orbit the orbit to draw.
      */
     private void drawOrbit(Orbit orbit) {
-        if (orbit.getEccentricity() > 1) {
-            drawOrbitAlt(orbit);
-            return;
+        if (showMarkers.get()) {
+            Position periapsisPosition = orbit.getPeriapsisPosition();
+            Position apoapsisPosition = orbit.getApoapsisPosition();
+            Position northernVertex = orbit.getNorthernVertex();
+            Position southernVertex = orbit.getSouthernVertex();
+            Position center = orbit.getCenter();
+
+            drawMarker(periapsisPosition, "Pe", Color.RED, 3);
+            drawMarker(apoapsisPosition, "Ap", Color.BLUE, 5);
+            drawMarker(northernVertex, "Ap", Color.GREEN, 5);
+            drawMarker(southernVertex, "Ap", Color.BLACK, 5);
+//            drawMarker(center, "Ap", Color.BLACK, 5);
+
+            drawLine(periapsisPosition, apoapsisPosition);
+            drawLine(northernVertex, southernVertex);
         }
 
+        if (Mathematics.equals(orbit.getInclination(), 0, 0.05) && orbit.getEccentricity() < 1)
+            overlyOptimisticDrawOrbit(orbit);
+        else
+            drawOrbitAltCached(orbit);
+    }
+
+    @Deprecated
+    private void drawEllipse(Orbit orbit) {
         getGraphicsContext2D().save();
 
-        getGraphicsContext2D().rotate(Conversion.radToDeg(orbit.getLongitudeOfAscendingNode() + orbit.getArgumentOfPeriapsis()));
+        Vector nodeAxis = Vector.getDirectionVector(orbit.getLongitudeOfAscendingNode());
+        Vector normalAxis = new Vector(0, 0, 1);
+        normalAxis.rotate(nodeAxis, orbit.getInclination());
 
-        // TODO rotate the orbit
+        Transform rotate0 = new Rotate(toDegrees(orbit.getInclination()), new Point3D(nodeAxis.getX(), nodeAxis.getY(), nodeAxis.getZ()));
+        Transform rotate1 = new Rotate(toDegrees(orbit.getLongitudeOfAscendingNode()));
+        Transform rotate2 = new Rotate(toDegrees(orbit.getArgumentOfPeriapsis()), new Point3D(normalAxis.getX(), normalAxis.getY(), normalAxis.getZ()));
+
+        Affine affine = new Affine();
+        affine.append(rotate0);
+        affine.append(rotate1);
+        affine.append(rotate2);
+
+        // God, none of this transformation is actually working. Great!
+
+        getGraphicsContext2D().transform(affine);
+
         getGraphicsContext2D().strokeOval(
                 (-orbit.getSemiMajorAxis() * 2 + orbit.getPeriapsis()) * zoom, // x
                 -orbit.getSemiMinorAxis() * zoom, // y
@@ -206,75 +247,121 @@ public class SpaceCanvas extends Canvas {
                 orbit.getSemiMinorAxis() * zoom * 2 // 2 b
         );
 
-        if (showMarkers.get()) {
-            drawMarker(orbit.getPeriapsis() * zoom, 0, "Pe", Color.RED, 3);
-            drawMarker(-orbit.getApoapsis() * zoom, 0, "Ap", Color.BLUE, 5);
-        }
+        getGraphicsContext2D().restore();
+    }
+
+    private void drawLine(Position p1, Position p2) {
+        getGraphicsContext2D().strokeLine(p1.getX() * zoom, p1.getY() * zoom, p2.getX() * zoom, p2.getY() * zoom);
+    }
+
+    private void overlyOptimisticDrawOrbit(Orbit orbit) {
+        getGraphicsContext2D().save();
+
+        getGraphicsContext2D().rotate(toDegrees(orbit.getLongitudeOfAscendingNode() + orbit.getArgumentOfPeriapsis()));
+
+        double x2 = orbit.getSemiMajorAxis() * zoom * 2;
+        double y = orbit.getSemiMinorAxis() * zoom;
+
+        getGraphicsContext2D().strokeOval(-x2 + orbit.getPeriapsis() * zoom, -y, x2, y * 2);
 
         getGraphicsContext2D().restore();
     }
 
-    /**
-     * Alternative method to draw orbits that joins lines created evaluating the each point of the orbit.
-     *
-     * @param orbit the orbit to draw.
-     */
+    @Deprecated
     private void drawOrbitAlt(Orbit orbit) {
-        // TODO Change  the resolution according to the zoom
-        // TODO draw only the bit actually visible in the viewport
+        final double epsilon = 0.01;
 
         getGraphicsContext2D().beginPath();
-        double theta = 0;
 
-        double maxValue = orbit.getRadius(theta) * zoom;
+        Position start = toCanvasCoordinate(orbit.getPositionFromParentAtAngle(0));
 
-        getGraphicsContext2D().moveTo(maxValue, 0);
+        moveTo(start);
 
-        for (; theta <= TWO_PI; theta += .05) {
-            double radius = orbit.getRadius(theta) * zoom;
+        Position point;
 
-            double x = radius * Math.cos(theta);
-            double y = -radius * Math.sin(theta);
-
-            if (x > maxValue)
-                continue;
-
-            //ctx.quadraticCurveTo(x*2, y*2, x, y);
-            getGraphicsContext2D().lineTo(x, y);
+        for (double theta = epsilon; theta <= TWO_PI; theta += epsilon) {
+            point = orbit.getPositionFromParentAtAngle(theta);
+            lineTo(toCanvasCoordinate(point));
         }
 
-        getGraphicsContext2D().lineTo(orbit.getRadius(theta) * zoom, -PI);
+        lineTo(start);
 
         getGraphicsContext2D().stroke();
         getGraphicsContext2D().closePath();
     }
 
-    /**
-     * Private method to draw PoIs on the map.
-     *
-     * @param x     x coordinate.
-     * @param y     y coordinate.
-     * @param name  name of the marker.
-     * @param color color of the marker.
-     */
-    private void drawMarker(double x, double y, String name, Color color) {
-        drawMarker(x, y, name, color, 3);
+    private void drawOrbitAltCached(Orbit orbit) {
+        if (!orbitsCache.containsKey(orbit))
+            createOrbitCache(orbit);
+
+        Position[] positions = orbitsCache.get(orbit);
+
+        getGraphicsContext2D().beginPath();
+
+        moveTo(toCanvasCoordinate(positions[0]));
+
+        for (int i = 1; i < positions.length; i++) {
+            lineTo(toCanvasCoordinate(positions[i]));
+        }
+
+        lineTo(toCanvasCoordinate(positions[0]));
+
+        getGraphicsContext2D().stroke();
+        getGraphicsContext2D().closePath();
+    }
+
+    private void createOrbitCache(Orbit orbit) {
+        final int count = 4096;
+
+        final double epsilon = TWO_PI / count;
+
+        System.out.println(count);
+        System.out.println(epsilon);
+
+        Position[] ps = new Position[count];
+
+        Position point;
+        for (int i = 0; i < count; i++) {
+            point = orbit.getPositionFromParentAtAngle(epsilon * i);
+
+            ps[i] = point;
+        }
+
+        this.orbitsCache.put(orbit, ps);
+    }
+
+    private void moveTo(Vector p) {
+        getGraphicsContext2D().moveTo(p.getX(), p.getY());
+    }
+
+    private void lineTo(Vector p) {
+        getGraphicsContext2D().lineTo(p.getX(), p.getY());
     }
 
     /**
      * Private method to draw PoIs on the map.
      *
-     * @param x      x coordinate.
-     * @param y      y coordinate.
-     * @param name   name of the marker.
-     * @param color  color of the marker.
-     * @param radius radius of the marker.
+     * @param position position of the marker.
+     * @param name     name of the marker.
+     * @param color    color of the marker.
      */
-    private void drawMarker(double x, double y, String name, Color color, int radius) {
+    private void drawMarker(Position position, String name, Color color) {
+        drawMarker(position, name, color, 3);
+    }
+
+    /**
+     * Private method to draw PoIs on the map.
+     *
+     * @param position position of the marker.
+     * @param name     name of the marker.
+     * @param color    color of the marker.
+     * @param radius   radius of the marker.
+     */
+    private void drawMarker(Position position, String name, Color color, int radius) {
         getGraphicsContext2D().save();
         getGraphicsContext2D().setFill(color);
 
-        getGraphicsContext2D().fillOval(x - radius * 0.5, y - radius * 0.5, radius, radius);
+        getGraphicsContext2D().fillOval(position.getX() * zoom - radius * 0.5, position.getY() * zoom - radius * 0.5, radius, radius);
 
         // Todo write labels
 
@@ -452,17 +539,17 @@ public class SpaceCanvas extends Canvas {
             double x = event.getX() - getWidth() / 2;
             double y = event.getY() - getHeight() / 2;
 
-            Position position = (Position) new Position(x, y).divided(zoom);
+            Position position = toUniversalCoordinate(new Position(x, y));
 
             CelestialBody body = astrarium.getRoot();
 
             Vector velocity = body.getCircularOrbitVelocity(position);
 
-//            Vector axis = new Vector(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5);
+            Vector axis = new Vector(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5);
 //
             double angle = random() * TWO_PI;
 //
-//            velocity.rotate(axis, angle);
+            velocity.rotate(axis, angle);
 
             velocity.rotateZ(angle);
 
@@ -472,6 +559,14 @@ public class SpaceCanvas extends Canvas {
 
             System.out.println(orbit);
         });
+    }
+
+    private Position toCanvasCoordinate(Position position) {
+        return (Position) position.getCopy().multiplied(zoom);
+    }
+
+    private Position toUniversalCoordinate(Position position) {
+        return (Position) position.getCopy().divided(zoom);
     }
 
     @Override
