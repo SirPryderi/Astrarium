@@ -201,7 +201,7 @@ public class SpaceCanvas extends Canvas {
             Position apoapsisPosition = orbit.getApoapsisPosition();
             Position northernVertex = orbit.getNorthernVertex();
             Position southernVertex = orbit.getSouthernVertex();
-            Position center = orbit.getCenter();
+//            Position center = orbit.getCenter();
 
             drawMarker(periapsisPosition, "Pe", Color.RED, 3);
             drawMarker(apoapsisPosition, "Ap", Color.BLUE, 5);
@@ -314,9 +314,6 @@ public class SpaceCanvas extends Canvas {
         final int count = 4096;
 
         final double epsilon = TWO_PI / count;
-
-        System.out.println(count);
-        System.out.println(epsilon);
 
         Position[] ps = new Position[count];
 
