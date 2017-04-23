@@ -130,6 +130,10 @@ public class Matrix {
      * @return the determinant of the matrix.
      */
     public double getDeterminant() {
+        if (this.matrix.length != this.matrix[0].length) {
+            throw new IllegalArgumentException("The matrix must be square to calculate its determinant.");
+        }
+
         return Matrix.getDeterminant(this.matrix, this.matrix.length);
     }
 
