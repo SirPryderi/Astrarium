@@ -72,15 +72,15 @@ public final class Orbit {
     /**
      * The position of the body from the parent when {@link #renderAtTime(long)} has been launched.
      */
-    private Position _positionFromParent;
+    private transient Position _positionFromParent;
     /**
      * The position of the body on the orbital plane when {@link #renderAtTime(long)} has been launched.
      */
-    private Position _positionFromOrbitalPlane;
+    private transient Position _positionFromOrbitalPlane;
     /**
      * The eccentric anomaly of the body when {@link #renderAtTime(long)} has been launched.
      */
-    private double _eccentricAnomaly;
+    private transient double _eccentricAnomaly;
     //endregion
 
     //region Constructors
