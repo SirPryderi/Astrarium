@@ -11,6 +11,7 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.geometry.Point3D;
 import javafx.scene.Cursor;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.input.MouseButton;
 import javafx.scene.paint.Color;
 import javafx.scene.text.TextAlignment;
 import javafx.scene.transform.Affine;
@@ -18,10 +19,9 @@ import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Transform;
 
 import java.util.HashMap;
-import java.util.Random;
+import java.util.function.Consumer;
 
 import static astrarium.utils.Mathematics.TWO_PI;
-import static java.lang.Math.random;
 import static java.lang.Math.toDegrees;
 
 /**
@@ -76,13 +76,33 @@ public class SpaceCanvas extends Canvas {
     private Position offset = new Position();
     //endregion
 
+    /**
+     * A cache of computed orbit position.
+     */
     private HashMap<Orbit, Position[]> orbitsCache = new HashMap<>();
+
+    //region Handlers
+    /**
+     * The even triggered when a point on the canvas is pressed.
+     */
+    private Consumer<Position> onClickHandler = null;
+    //endregion
 
     /**
      * {@inheritDoc}
      **/
     public SpaceCanvas() {
         makeCanvasDraggable();
+    }
+
+    /**
+     * Sets the handler for the event triggered when the canvas is clicked.
+     * The position returned is in the absolute coordinates.
+     *
+     * @param onClickHandler the new handler.
+     */
+    public void setOnClickHandler(Consumer<Position> onClickHandler) {
+        this.onClickHandler = onClickHandler;
     }
 
     //region Time
@@ -538,30 +558,29 @@ public class SpaceCanvas extends Canvas {
 
             Position position = toUniversalCoordinate(new Position(x, y));
 
-            CelestialBody body = astrarium.getRoot();
-
-            Vector velocity = body.getCircularOrbitVelocity(position);
-
-            Vector axis = new Vector(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5);
-//
-            double angle = random() * TWO_PI;
-//
-            velocity.rotate(axis, angle);
-
-            velocity.rotateZ(angle);
-
-            Orbit orbit = Orbit.calculateOrbitFromPositionAndVelocity(astrarium.getRoot(), position, velocity, getTime());
-
-            new CelestialBody(String.valueOf(new Random().nextInt(100)), 0, 2e5, orbit);
-
-            System.out.println(orbit);
+            if (onClickHandler != null && event.getButton() == MouseButton.PRIMARY && event.isStillSincePress())
+                onClickHandler.accept(position);
         });
     }
 
+    /**
+     * Converts a position from the universal coordinates used in the model
+     * to the coordinates in the viewport of the canvas.
+     *
+     * @param position the position to convert.
+     * @return the converted position.
+     */
     private Position toCanvasCoordinate(Position position) {
         return (Position) position.getCopy().multiplied(zoom);
     }
 
+    /**
+     * Converts a position from the canvas coordinates
+     * to the coordinates universal coordinates.
+     *
+     * @param position the position to convert.
+     * @return the converted position.
+     */
     private Position toUniversalCoordinate(Position position) {
         return (Position) position.getCopy().divided(zoom);
     }

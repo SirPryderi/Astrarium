@@ -2,6 +2,8 @@ package fx;
 
 import astrarium.Astrarium;
 import astrarium.CelestialBody;
+import astrarium.Orbit;
+import astrarium.utils.Vector;
 import fx.modals.BodyModal;
 import fx.modals.Modal;
 import io.JsonHub;
@@ -22,6 +24,10 @@ import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.Random;
+
+import static astrarium.utils.Mathematics.TWO_PI;
+import static java.lang.Math.random;
 
 /**
  * Controller for the view of the main window.
@@ -185,6 +191,26 @@ public class MainController {
         canvas.heightProperty().bind(((Pane) parent).heightProperty());
 
         canvas.setAstrarium(astrarium);
+
+        canvas.setOnClickHandler(position -> {
+            CelestialBody body = astrarium.getRoot();
+
+            Vector velocity = body.getCircularOrbitVelocity(position);
+
+            Vector axis = new Vector(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5);
+//
+            double angle = random() * TWO_PI;
+//
+            velocity.rotate(axis, angle);
+
+            velocity.rotateZ(angle);
+
+            Orbit orbit = Orbit.calculateOrbitFromPositionAndVelocity(astrarium.getRoot(), position, velocity, canvas.getTime());
+
+            new CelestialBody(String.valueOf(new Random().nextInt(100)), 0, 2e5, orbit);
+
+            System.out.println(orbit);
+        });
 
         canvas.setTime(time);
     }
