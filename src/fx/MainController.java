@@ -104,7 +104,7 @@ public class MainController {
      */
     public MainController() {
         try {
-            astrarium = new Astrarium(JsonHub.importDefaultMap("SolSystem"));
+            astrarium = JsonHub.importDefaultMap("SolSystem");
         } catch (IOException e) {
             System.err.println("Failed to load default map.");
             e.printStackTrace();
@@ -269,10 +269,7 @@ public class MainController {
 
         if (file != null)
             try {
-
-                CelestialBody root = JsonHub.importJson(file);
-
-                astrarium = new Astrarium(root);
+                astrarium = JsonHub.importAstrariumJson(file);
 
                 initNavigationTree();
                 canvas.setAstrarium(astrarium);
@@ -317,7 +314,7 @@ public class MainController {
 
         if (file != null)
             try {
-                JsonHub.exportJson(file, astrarium.getRoot());
+                JsonHub.exportJson(file, astrarium);
                 currentFile = file;
             } catch (IOException e) {
                 e.printStackTrace();

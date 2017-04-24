@@ -1,164 +1,165 @@
 {
-  "name": "Sun",
-  "mass": 1.988544E30,
-  "radius": 6.957E8,
-  "children": [
-    {
-      "name": "Mercury",
-      "mass": 3.302E23,
-      "radius": 2440000.0,
-      "orbit": {
-        "semiMajorAxis": 5.790901023710302E10,
-        "eccentricity": 0.2056269983493162,
-        "inclination": 0.1222923466739482,
-        "longitudeOfAscendingNode": 0.8441882832337896,
-        "argumentOfPeriapsis": 0.5067909454115429,
-        "meanAnomalyAtEpoch": 5.8127245541804395
+  "root": {
+    "name": "Sun",
+    "mass": 1.988544E30,
+    "radius": 6.957E8,
+    "children": [
+      {
+        "name": "Mercury",
+        "mass": 3.302E23,
+        "radius": 2440000.0,
+        "orbit": {
+          "semiMajorAxis": 5.790901023710302E10,
+          "eccentricity": 0.2056269983493162,
+          "inclination": 0.1222923466739482,
+          "longitudeOfAscendingNode": 0.8441882832337896,
+          "argumentOfPeriapsis": 0.5067909454115429,
+          "meanAnomalyAtEpoch": 5.8127245541804395
+        },
+        "children": []
       },
-      "children": []
-    },
-    {
-      "name": "Venus",
-      "mass": 4.8685E24,
-      "radius": 6051800.0,
-      "orbit": {
-        "semiMajorAxis": 1.082085044648895E11,
-        "eccentricity": 0.006829204559177964,
-        "inclination": 0.059252398390695064,
-        "longitudeOfAscendingNode": 1.3397427014716123,
-        "argumentOfPeriapsis": 0.9550343529881682,
-        "meanAnomalyAtEpoch": 2.358875785478538
+      {
+        "name": "Venus",
+        "mass": 4.8685E24,
+        "radius": 6051800.0,
+        "orbit": {
+          "semiMajorAxis": 1.082085044648895E11,
+          "eccentricity": 0.006829204559177964,
+          "inclination": 0.059252398390695064,
+          "longitudeOfAscendingNode": 1.3397427014716123,
+          "argumentOfPeriapsis": 0.9550343529881682,
+          "meanAnomalyAtEpoch": 2.358875785478538
+        },
+        "children": []
       },
-      "children": []
-    },
-    {
-      "name": "Earth",
-      "mass": 5.97219E24,
-      "radius": 6371010.0,
-      "orbit": {
-        "semiMajorAxis": 1.496043207391184E11,
-        "eccentricity": 0.01673346437176453,
-        "inclination": 6.714439597083307E-5,
-        "longitudeOfAscendingNode": 0.3808817892072379,
-        "argumentOfPeriapsis": 1.3898314212555143,
-        "meanAnomalyAtEpoch": 6.268421608320323
+      {
+        "name": "Earth",
+        "mass": 5.97219E24,
+        "radius": 6371010.0,
+        "orbit": {
+          "semiMajorAxis": 1.496043207391184E11,
+          "eccentricity": 0.01673346437176453,
+          "inclination": 6.714439597083307E-5,
+          "longitudeOfAscendingNode": 0.3808817892072379,
+          "argumentOfPeriapsis": 1.3898314212555143,
+          "meanAnomalyAtEpoch": 6.268421608320323
+        },
+        "children": [
+          {
+            "name": "Moon",
+            "mass": 7.34767309E22,
+            "radius": 1737000.0,
+            "orbit": {
+              "semiMajorAxis": 3.797E8,
+              "eccentricity": 0.01673346437176453,
+              "inclination": 6.714439597083307E-5,
+              "longitudeOfAscendingNode": 0.3808817892072379,
+              "argumentOfPeriapsis": 1.3898314212555143,
+              "meanAnomalyAtEpoch": 6.268421608320323
+            },
+            "children": []
+          }
+        ]
       },
-      "children": [
-        {
-          "name": "Moon",
-          "mass": 7.34767309E22,
-          "radius": 1.737E6,
-          "orbit": {
-            "semiMajorAxis": 3.79700E8,
-            "eccentricity": 0.01673346437176453,
-            "inclination": 6.714439597083307E-5,
-            "longitudeOfAscendingNode": 0.3808817892072379,
-            "argumentOfPeriapsis": 1.3898314212555143,
-            "meanAnomalyAtEpoch": 6.268421608320323
-          },
-          "children": []
-        }
-      ]
-    },
-    {
-      "name": "Mars",
-      "mass": 6.4185E23,
-      "radius": 3389900.0,
-      "orbit": {
-        "semiMajorAxis": 2.279467113340177E11,
-        "eccentricity": 0.09344515341440747,
-        "inclination": 0.032328235545630975,
-        "longitudeOfAscendingNode": 0.8665124477280377,
-        "argumentOfPeriapsis": 4.9975306277647205,
-        "meanAnomalyAtEpoch": 0.6522956688868401
+      {
+        "name": "Mars",
+        "mass": 6.4185E23,
+        "radius": 3389900.0,
+        "orbit": {
+          "semiMajorAxis": 2.279467113340177E11,
+          "eccentricity": 0.09344515341440747,
+          "inclination": 0.032328235545630975,
+          "longitudeOfAscendingNode": 0.8665124477280377,
+          "argumentOfPeriapsis": 4.9975306277647205,
+          "meanAnomalyAtEpoch": 0.6522956688868401
+        },
+        "children": []
       },
-      "children": []
-    },
-    {
-      "name": "Jupiter",
-      "mass": 1.89813E27,
-      "radius": 6.9911E7,
-      "orbit": {
-        "semiMajorAxis": 7.78453827627105E11,
-        "eccentricity": 0.04806940682228194,
-        "inclination": 0.02277392051797093,
-        "longitudeOfAscendingNode": 1.7523593689989676,
-        "argumentOfPeriapsis": 4.776399934492021,
-        "meanAnomalyAtEpoch": 3.3152948526009576
+      {
+        "name": "Jupiter",
+        "mass": 1.89813E27,
+        "radius": 6.9911E7,
+        "orbit": {
+          "semiMajorAxis": 7.78453827627105E11,
+          "eccentricity": 0.04806940682228194,
+          "inclination": 0.02277392051797093,
+          "longitudeOfAscendingNode": 1.7523593689989676,
+          "argumentOfPeriapsis": 4.776399934492021,
+          "meanAnomalyAtEpoch": 3.3152948526009576
+        },
+        "children": [
+          {
+            "name": "Callisto",
+            "mass": 1.075938E23,
+            "radius": 2410300.0,
+            "orbit": {
+              "semiMajorAxis": 1.8E9,
+              "eccentricity": 0.0074,
+              "inclination": 0.035203291,
+              "longitudeOfAscendingNode": 0.0,
+              "argumentOfPeriapsis": 0.0,
+              "meanAnomalyAtEpoch": 0.0
+            },
+            "children": []
+          }
+        ]
       },
-      "children": [
-        {
-          "name": "Callisto",
-          "mass": 1.075938E23,
-          "radius": 2.4103E6,
-          "orbit": {
-            "semiMajorAxis": 1.8E9,
-            "eccentricity": 0.0074,
-            "inclination": 0.035203291,
-            "longitudeOfAscendingNode": 0,
-            "argumentOfPeriapsis": 0,
-            "meanAnomalyAtEpoch": 0
-          },
-          "children": []
-        }
-      ]
-    },
-    {
-      "name": "Saturn",
-      "mass": 5.68319E26,
-      "radius": 5.8232E7,
-      "orbit": {
-        "semiMajorAxis": 1.4233861518997E12,
-        "eccentricity": 0.05340939486501215,
-        "inclination": 0.04340357260290537,
-        "longitudeOfAscendingNode": 1.9855499471061775,
-        "argumentOfPeriapsis": 5.946011872812652,
-        "meanAnomalyAtEpoch": 5.387625454538559
+      {
+        "name": "Saturn",
+        "mass": 5.68319E26,
+        "radius": 5.8232E7,
+        "orbit": {
+          "semiMajorAxis": 1.4233861518997E12,
+          "eccentricity": 0.05340939486501215,
+          "inclination": 0.04340357260290537,
+          "longitudeOfAscendingNode": 1.9855499471061775,
+          "argumentOfPeriapsis": 5.946011872812652,
+          "meanAnomalyAtEpoch": 5.387625454538559
+        },
+        "children": []
       },
-      "children": []
-    },
-    {
-      "name": "Uranus",
-      "mass": 8.681029999999999E25,
-      "radius": 2.5362E7,
-      "orbit": {
-        "semiMajorAxis": 2.883923472489661E12,
-        "eccentricity": 0.05115378291376737,
-        "inclination": 0.013510174176974631,
-        "longitudeOfAscendingNode": 1.290093831401391,
-        "argumentOfPeriapsis": 1.7193396848451554,
-        "meanAnomalyAtEpoch": 0.21470556576506417
+      {
+        "name": "Uranus",
+        "mass": 8.681029999999999E25,
+        "radius": 2.5362E7,
+        "orbit": {
+          "semiMajorAxis": 2.883923472489661E12,
+          "eccentricity": 0.05115378291376737,
+          "inclination": 0.013510174176974631,
+          "longitudeOfAscendingNode": 1.290093831401391,
+          "argumentOfPeriapsis": 1.7193396848451554,
+          "meanAnomalyAtEpoch": 0.21470556576506417
+        },
+        "children": []
       },
-      "children": []
-    },
-    {
-      "name": "Neptune",
-      "mass": 1.0241E26,
-      "radius": 2.4624E7,
-      "orbit": {
-        "semiMajorAxis": 4.517459057219579E12,
-        "eccentricity": 0.004317459534464945,
-        "inclination": 0.030875661908205478,
-        "longitudeOfAscendingNode": 2.3012834468759054,
-        "argumentOfPeriapsis": 4.7606853848658774,
-        "meanAnomalyAtEpoch": 3.396465836468412
+      {
+        "name": "Neptune",
+        "mass": 1.0241E26,
+        "radius": 2.4624E7,
+        "orbit": {
+          "semiMajorAxis": 4.517459057219579E12,
+          "eccentricity": 0.004317459534464945,
+          "inclination": 0.030875661908205478,
+          "longitudeOfAscendingNode": 2.3012834468759054,
+          "argumentOfPeriapsis": 4.7606853848658774,
+          "meanAnomalyAtEpoch": 3.396465836468412
+        },
+        "children": []
       },
-      "children": []
-    },
-    {
-      "name": "Pluto",
-      "mass": 1.307E22,
-      "radius": 1307.0,
-      "orbit": {
-        "semiMajorAxis": 5.977295212033069E12,
-        "eccentricity": 0.2543573580038568,
-        "inclination": 0.2996396636808827,
-        "longitudeOfAscendingNode": 1.929382775873369,
-        "argumentOfPeriapsis": 1.9457355506267646,
-        "meanAnomalyAtEpoch": 5.811836655916801
-      },
-      "children": []
-    }
-  ],
-  "orbit": null
+      {
+        "name": "Pluto",
+        "mass": 1.307E22,
+        "radius": 1307.0,
+        "orbit": {
+          "semiMajorAxis": 5.977295212033069E12,
+          "eccentricity": 0.2543573580038568,
+          "inclination": 0.2996396636808827,
+          "longitudeOfAscendingNode": 1.929382775873369,
+          "argumentOfPeriapsis": 1.9457355506267646,
+          "meanAnomalyAtEpoch": 5.811836655916801
+        },
+        "children": []
+      }
+    ]
+  }
 }

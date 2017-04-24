@@ -1,5 +1,6 @@
 package io;
 
+import astrarium.Astrarium;
 import astrarium.CelestialBody;
 import astrarium.Orbit;
 import com.google.gson.*;
@@ -19,14 +20,29 @@ import java.nio.file.Paths;
  * @author Vittorio
  */
 public abstract class JsonHub {
+    private static Gson getRegisteredGson() {
+        return new GsonBuilder()
+                .registerTypeAdapter(CelestialBody.class, new CelestialBodySerializer())
+                .setPrettyPrinting()
+                .create();
+    }
 
     public static String exportJson(CelestialBody celestialBody) {
-        Gson gson = new GsonBuilder().registerTypeAdapter(CelestialBody.class, new CelestialBodySerializer()).setPrettyPrinting().create();
+        Gson gson = getRegisteredGson();
 
         Type type = new TypeToken<CelestialBody>() {
         }.getType();
 
         return gson.toJson(celestialBody, type);
+    }
+
+    public static String exportJson(Astrarium astrarium) {
+        Gson gson = getRegisteredGson();
+
+        Type type = new TypeToken<Astrarium>() {
+        }.getType();
+
+        return gson.toJson(astrarium, type);
     }
 
     public static void exportJson(File file, CelestialBody celestialBody) throws IOException {
@@ -35,13 +51,19 @@ public abstract class JsonHub {
         Files.write(file.toPath(), string.getBytes());
     }
 
-    public static CelestialBody importJson(File file) throws IOException {
-        String string = readFile(file.getAbsolutePath(), Charset.defaultCharset());
+    public static void exportJson(File file, Astrarium astrarium) throws IOException {
+        String string = exportJson(astrarium);
 
-        return importJson(string);
+        Files.write(file.toPath(), string.getBytes());
     }
 
-    public static CelestialBody importJson(String string) {
+    public static CelestialBody importCelestialBodyJson(File file) throws IOException {
+        String string = readFile(file.getAbsolutePath(), Charset.defaultCharset());
+
+        return importCelestialBodyJson(string);
+    }
+
+    public static CelestialBody importCelestialBodyJson(String string) {
         Type type = new TypeToken<CelestialBody>() {
         }.getType();
 
@@ -50,8 +72,32 @@ public abstract class JsonHub {
         return gson.fromJson(string, type);
     }
 
-    public static CelestialBody importJson(Reader reader) {
+    public static CelestialBody importCelestialBodyJson(Reader reader) {
         Type type = new TypeToken<CelestialBody>() {
+        }.getType();
+
+        Gson gson = new GsonBuilder().registerTypeAdapter(CelestialBody.class, new CelestialBodyDeserializer()).create();
+
+        return gson.fromJson(reader, type);
+    }
+
+    public static Astrarium importAstrariumJson(File file) throws IOException {
+        String string = readFile(file.getAbsolutePath(), Charset.defaultCharset());
+
+        return importAstrariumJson(string);
+    }
+
+    public static Astrarium importAstrariumJson(String string) {
+        Type type = new TypeToken<Astrarium>() {
+        }.getType();
+
+        Gson gson = new GsonBuilder().registerTypeAdapter(CelestialBody.class, new CelestialBodyDeserializer()).create();
+
+        return gson.fromJson(string, type);
+    }
+
+    public static Astrarium importAstrariumJson(Reader reader) {
+        Type type = new TypeToken<Astrarium>() {
         }.getType();
 
         Gson gson = new GsonBuilder().registerTypeAdapter(CelestialBody.class, new CelestialBodyDeserializer()).create();
@@ -64,13 +110,14 @@ public abstract class JsonHub {
         return new String(encoded, encoding);
     }
 
-    public static CelestialBody importDefaultMap(String solSystem) throws IOException {
+    public static Astrarium importDefaultMap(String solSystem) throws IOException {
         InputStream in = JsonHub.class.getResourceAsStream("/astrarium/data/" + solSystem + ".json");
         Reader fr = new InputStreamReader(in, "utf-8");
 
-        return importJson(fr);
+        return importAstrariumJson(fr);
     }
 
+    //region Deserializers
     private static class CelestialBodyDeserializer implements JsonDeserializer<CelestialBody> {
 
         @Override
@@ -141,7 +188,9 @@ public abstract class JsonHub {
             return new Orbit(parent, semiMajorAxis, eccentricity, inclination, longitudeOfAscendingNode, argumentOfPeriapsis, meanAnomalyAtEpoch);
         }
     }
+    //endregion
 
+    //region Serializers
     private static class CelestialBodySerializer implements JsonSerializer<CelestialBody> {
 
         @Override
@@ -187,4 +236,5 @@ public abstract class JsonHub {
             return object;
         }
     }
+    //endregion
 }

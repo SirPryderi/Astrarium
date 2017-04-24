@@ -26,7 +26,7 @@ public class Astrarium {
     /**
      * Time of the simulation.
      */
-    private long time = 0; // ago in a galaxy far far away...
+    private transient long time = 0; // ago in a galaxy far far away...
 
     /**
      * Constructor that instantiates the {@link Astrarium} object with its root element.
