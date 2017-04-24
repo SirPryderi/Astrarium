@@ -16,6 +16,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
 import javafx.stage.Window;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -255,23 +256,9 @@ public class MainController {
     public void loadFile() {
         canvasAnimationTimer.stop();
 
-        FileChooser fileChooser = new FileChooser();
+        FileChooser fileChooser = getFileChooser();
+
         fileChooser.setTitle("Open Data File");
-
-        try {
-            File defaultFolder = new File("src/astrarium/data/");
-
-            if (!defaultFolder.exists())
-                throw new FileNotFoundException();
-
-            fileChooser.setInitialDirectory(defaultFolder);
-        } catch (Exception e) {
-            fileChooser.setInitialDirectory(
-                    new File(System.getProperty("user.home"))
-            );
-        }
-
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Data", "*.json"));
         File file = fileChooser.showOpenDialog(canvas.getScene().getWindow());
 
         if (file != null)
@@ -288,6 +275,53 @@ public class MainController {
             }
 
         canvasAnimationTimer.start();
+    }
+
+    /**
+     * Opens a pop-up to save a file.
+     */
+    @FXML
+    public void saveAsFile() {
+        canvasAnimationTimer.stop();
+
+        FileChooser fileChooser = getFileChooser();
+
+        fileChooser.setTitle("Save Data File");
+        File file = fileChooser.showSaveDialog(canvas.getScene().getWindow());
+
+        if (file != null)
+            try {
+                JsonHub.exportJson(file, astrarium.getRoot());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        canvasAnimationTimer.start();
+    }
+
+    /**
+     * Returns the default file chooser.
+     *
+     * @return file chooser.
+     */
+    @NotNull
+    private FileChooser getFileChooser() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Data", "*.json"));
+
+        try {
+            File defaultFolder = new File("src/astrarium/data/");
+
+            if (!defaultFolder.exists())
+                throw new FileNotFoundException();
+
+            fileChooser.setInitialDirectory(defaultFolder);
+        } catch (Exception e) {
+            fileChooser.setInitialDirectory(
+                    new File(System.getProperty("user.home"))
+            );
+        }
+        return fileChooser;
     }
 
     /**

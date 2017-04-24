@@ -11,7 +11,7 @@
             <MenuItem mnemonicParsing="false" text="Save" accelerator="Shortcut+S" disable="true"/>
             <SeparatorMenuItem/>
             <MenuItem mnemonicParsing="false" text="Open..." accelerator="Shortcut+O" onAction="#loadFile"/>
-            <MenuItem mnemonicParsing="false" text="Save as..." accelerator="Shortcut+Shift+S" disable="true"/>
+            <MenuItem mnemonicParsing="false" text="Save as..." accelerator="Shortcut+Shift+S" onAction="#saveAsFile"/>
             <SeparatorMenuItem/>
             <MenuItem mnemonicParsing="false" text="Exit" accelerator="Shortcut+Q" disable="true"/>
         </Menu>

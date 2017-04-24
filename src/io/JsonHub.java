@@ -29,6 +29,12 @@ public abstract class JsonHub {
         return gson.toJson(celestialBody, type);
     }
 
+    public static void exportJson(File file, CelestialBody celestialBody) throws IOException {
+        String string = exportJson(celestialBody);
+
+        Files.write(file.toPath(), string.getBytes());
+    }
+
     public static CelestialBody importJson(File file) throws IOException {
         String string = readFile(file.getAbsolutePath(), Charset.defaultCharset());
 
