@@ -8,7 +8,7 @@
 
     <MenuBar fx:id="menu" HBox.hgrow="ALWAYS">
         <Menu mnemonicParsing="false" text="File">
-            <MenuItem mnemonicParsing="false" text="Save" accelerator="Shortcut+S" disable="true"/>
+            <MenuItem mnemonicParsing="false" text="Save" accelerator="Shortcut+S" onAction="#saveFile"/>
             <SeparatorMenuItem/>
             <MenuItem mnemonicParsing="false" text="Open..." accelerator="Shortcut+O" onAction="#loadFile"/>
             <MenuItem mnemonicParsing="false" text="Save as..." accelerator="Shortcut+Shift+S" onAction="#saveAsFile"/>

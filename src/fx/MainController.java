@@ -81,6 +81,11 @@ public class MainController {
     public TreeView<CelestialBody> navigationTree;
     //endregion
 
+    /**
+     * The file currently opened.
+     */
+    private File currentFile;
+
     //region Animation
     /**
      * The timer orchestrating the animation of the {@link SpaceCanvas} map.
@@ -210,6 +215,8 @@ public class MainController {
 
             new CelestialBody(String.valueOf(new Random().nextInt(100)), 0, 2e5, orbit);
 
+            initNavigationTree();
+
             System.out.println(orbit);
         });
 
@@ -257,7 +264,6 @@ public class MainController {
         canvasAnimationTimer.stop();
 
         FileChooser fileChooser = getFileChooser();
-
         fileChooser.setTitle("Open Data File");
         File file = fileChooser.showOpenDialog(canvas.getScene().getWindow());
 
@@ -270,6 +276,8 @@ public class MainController {
 
                 initNavigationTree();
                 canvas.setAstrarium(astrarium);
+
+                currentFile = file;
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -282,19 +290,40 @@ public class MainController {
      */
     @FXML
     public void saveAsFile() {
-        canvasAnimationTimer.stop();
-
         FileChooser fileChooser = getFileChooser();
-
         fileChooser.setTitle("Save Data File");
         File file = fileChooser.showSaveDialog(canvas.getScene().getWindow());
+
+        saveFile(file);
+    }
+
+    /**
+     * Saves the current opened file.
+     * If current file is {@code null}, a save as dialog will appear.
+     */
+    @FXML
+    public void saveFile() {
+        saveFile(currentFile);
+    }
+
+    /**
+     * Saves the current state of the astrarium to the specified {@code file}.
+     * If current file is {@code null}, a save as dialog will appear.
+     *
+     * @param file file to save.
+     */
+    private void saveFile(File file) {
+        canvasAnimationTimer.stop();
 
         if (file != null)
             try {
                 JsonHub.exportJson(file, astrarium.getRoot());
+                currentFile = file;
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        else
+            saveAsFile();
 
         canvasAnimationTimer.start();
     }
@@ -310,7 +339,11 @@ public class MainController {
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Data", "*.json"));
 
         try {
-            File defaultFolder = new File("src/astrarium/data/");
+            File defaultFolder;
+
+            defaultFolder = currentFile != null ?
+                    currentFile.getParentFile() :
+                    new File("src/astrarium/data/");
 
             if (!defaultFolder.exists())
                 throw new FileNotFoundException();
@@ -321,6 +354,7 @@ public class MainController {
                     new File(System.getProperty("user.home"))
             );
         }
+
         return fileChooser;
     }
 
