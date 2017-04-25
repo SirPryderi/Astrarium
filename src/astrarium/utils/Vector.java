@@ -125,7 +125,7 @@ public class Vector {
             return;
 
         // Normalise vector
-        Double length = this.getMagnitude();
+        double length = this.getMagnitude();
         this.normalise();
 
         // Normalise Axis
