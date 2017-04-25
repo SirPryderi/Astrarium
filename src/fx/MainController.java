@@ -300,7 +300,8 @@ public class MainController {
         fileChooser.setTitle("Save Data File");
         File file = fileChooser.showSaveDialog(canvas.getScene().getWindow());
 
-        saveFile(file);
+        if (file != null)
+            saveFile(file);
     }
 
     /**
