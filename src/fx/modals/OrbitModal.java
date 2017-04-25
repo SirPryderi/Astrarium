@@ -59,8 +59,8 @@ public class OrbitModal extends Modal<Orbit> {
 
         referenceBodyField = new BodiesComboBox();
 
-        semiMajorAxisField = new NumberTextField();
-        eccentricityField = new NumberTextField();
+        semiMajorAxisField = new NumberTextField(1e11, 0, Double.POSITIVE_INFINITY);
+        eccentricityField = new NumberTextField(0, 0, 0.9999);
         inclinationField = new NumberTextField();
         inclinationField = new NumberTextField();
         longitudeOfAscendingNodeField = new NumberTextField();
@@ -91,12 +91,12 @@ public class OrbitModal extends Modal<Orbit> {
             CelestialBody body = referenceBodyField.getSelectionModel().getSelectedItem();
             return new Orbit(
                     body,
-                    semiMajorAxisField.getNumber().doubleValue(),
-                    eccentricityField.getNumber().doubleValue(),
-                    inclinationField.getNumber().doubleValue(),
-                    longitudeOfAscendingNodeField.getNumber().doubleValue(),
-                    argumentOfPeriapsisField.getNumber().doubleValue(),
-                    meanAnomalyAtEpochField.getNumber().doubleValue()
+                    semiMajorAxisField.getNumber(),
+                    eccentricityField.getNumber(),
+                    inclinationField.getNumber(),
+                    longitudeOfAscendingNodeField.getNumber(),
+                    argumentOfPeriapsisField.getNumber(),
+                    meanAnomalyAtEpochField.getNumber()
             );
         } else {
             return null;

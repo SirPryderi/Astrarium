@@ -4,7 +4,6 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.control.TextField;
 
-import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
@@ -15,6 +14,7 @@ import java.text.ParseException;
  * user hits RETURN.
  *
  * @author Thomas Bolz
+ * @author Vittorio
  */
 public class NumberTextField extends TextField {
     /**
@@ -24,33 +24,59 @@ public class NumberTextField extends TextField {
     /**
      * The numeric value of the field.
      */
-    private ObjectProperty<BigDecimal> number = new SimpleObjectProperty<>();
+    private ObjectProperty<Double> number = new SimpleObjectProperty<>();
+    private double minimumValue = Double.NEGATIVE_INFINITY;
+    private double maximumValue = Double.POSITIVE_INFINITY;
 
     public NumberTextField() {
-        this(BigDecimal.ZERO);
+        this(0);
     }
 
-    public NumberTextField(BigDecimal value) {
+    public NumberTextField(double value) {
         this(value, DecimalFormat.getInstance());
         initHandlers();
     }
 
-    public NumberTextField(BigDecimal value, NumberFormat numberFormat) {
+    public NumberTextField(double value, NumberFormat numberFormat) {
         super();
         this.numberFormat = numberFormat;
+        numberFormat.setMaximumFractionDigits(100);
         initHandlers();
-        setNumber(value);
+        setValue(value);
     }
 
-    public final BigDecimal getNumber() {
+    public NumberTextField(double value, double minimumValue, double maximumValue) {
+        this(value);
+
+        setMinimumValue(minimumValue);
+        setMaximumValue(maximumValue);
+    }
+
+    public double getMinimumValue() {
+        return minimumValue;
+    }
+
+    public void setMinimumValue(double minimumValue) {
+        this.minimumValue = minimumValue;
+    }
+
+    public double getMaximumValue() {
+        return maximumValue;
+    }
+
+    public void setMaximumValue(double maximumValue) {
+        this.maximumValue = maximumValue;
+    }
+
+    public final double getNumber() {
         return number.get();
     }
 
-    public final void setNumber(BigDecimal value) {
+    public final void setNumber(double value) {
         number.set(value);
     }
 
-    public ObjectProperty<BigDecimal> numberProperty() {
+    public ObjectProperty<Double> numberProperty() {
         return number;
     }
 
@@ -66,7 +92,12 @@ public class NumberTextField extends TextField {
         });
 
         // Set text in field if BigDecimal property is changed from outside.
-        numberProperty().addListener((obserable, oldValue, newValue) -> setText(numberFormat.format(newValue)));
+        numberProperty().addListener((observable, oldValue, newValue) -> setText(numberFormat.format(newValue)));
+    }
+
+    public void setValue(double value) {
+        setText(numberFormat.format(value));
+        this.number.setValue(value);
     }
 
     /**
@@ -74,19 +105,25 @@ public class NumberTextField extends TextField {
      */
     private void parseAndFormatInput() {
         try {
-            // TODO Better validation must be enforced
-            // TODO Longer precision
             String input = getText();
+
             if (input == null || input.length() == 0) {
-                return;
+                if (0 > minimumValue)
+                    setValue(0);
+                else
+                    setValue(minimumValue);
             }
+
             Number parsedNumber = numberFormat.parse(input);
-            BigDecimal newValue = new BigDecimal(parsedNumber.toString());
-            setNumber(newValue);
-            selectAll();
+            double newValue = parsedNumber.doubleValue();
+
+            if (newValue > maximumValue || newValue < minimumValue)
+                throw new ParseException("Value out of bounds.", 0);
+
+            setValue(newValue);
         } catch (ParseException ex) {
             // If parsing fails keep old number
-            setText(numberFormat.format(number.get()));
+            setValue(number.get());
         }
     }
 }

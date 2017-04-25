@@ -17,7 +17,7 @@ import org.jetbrains.annotations.Nullable;
 public class BodyModal extends Modal<CelestialBody> {
     private TextField nameField;
     private NumberTextField massField;
-    private NumberTextField diameterField;
+    private NumberTextField radiusField;
     private OrbitField orbitField;
 
 
@@ -35,13 +35,13 @@ public class BodyModal extends Modal<CelestialBody> {
         FormGridAdapter adapter = new FormGridAdapter(gridPane);
 
         nameField = new TextField();
-        massField = new NumberTextField();
-        diameterField = new NumberTextField();
+        massField = new NumberTextField(10E24, 0, Double.MAX_VALUE);
+        radiusField = new NumberTextField(6E6, 0, Double.MAX_VALUE);
         orbitField = new OrbitField();
 
         adapter.addToGrid("Name", nameField);
         adapter.addToGrid("Mass", massField);
-        adapter.addToGrid("Diameter", diameterField);
+        adapter.addToGrid("Radius", radiusField);
         adapter.addToGrid("Orbit", orbitField);
 
         orbitField.setPrefWidth(150);
@@ -55,7 +55,7 @@ public class BodyModal extends Modal<CelestialBody> {
     @Override
     public CelestialBody getResult() {
         if (accepted)
-            return new CelestialBody(nameField.getText(), massField.getNumber().doubleValue(), diameterField.getNumber().doubleValue(), orbitField.getValue());
+            return new CelestialBody(nameField.getText(), massField.getNumber(), radiusField.getNumber(), orbitField.getValue());
         else
             return null;
     }

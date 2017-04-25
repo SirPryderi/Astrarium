@@ -1,6 +1,7 @@
 package fx.modals;
 
 import javafx.scene.Node;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 import org.jetbrains.annotations.NotNull;
@@ -64,6 +65,9 @@ class FormGridAdapter {
 
         gridPane.add(text, 0, offset);
         gridPane.add(node, 1, offset);
+
+        if (node instanceof TextField)
+            ((TextField) node).setPromptText(label);
 
         offset++;
     }
