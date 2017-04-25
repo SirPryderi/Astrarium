@@ -4,6 +4,7 @@ import astrarium.Astrarium;
 import astrarium.CelestialBody;
 import astrarium.Orbit;
 import astrarium.utils.Vector;
+import fx.components.SpaceCanvas;
 import fx.modals.BodyModal;
 import fx.modals.Modal;
 import io.JsonHub;

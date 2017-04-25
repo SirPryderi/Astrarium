@@ -1,4 +1,4 @@
-package fx;
+package fx.components;
 
 import astrarium.Astrarium;
 import astrarium.CelestialBody;
@@ -6,6 +6,7 @@ import astrarium.Orbit;
 import astrarium.utils.Mathematics;
 import astrarium.utils.Position;
 import astrarium.utils.Vector;
+import fx.utils.Colors;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.geometry.Point3D;
@@ -36,27 +37,27 @@ public class SpaceCanvas extends Canvas {
     /**
      * A flag for showing the orbit trace.
      */
-    BooleanProperty showOrbit = new SimpleBooleanProperty(true);
+    public BooleanProperty showOrbit = new SimpleBooleanProperty(true);
     /**
      * A flag for showing the labels with bodies names.
      */
-    BooleanProperty showNames = new SimpleBooleanProperty(true);
+    public BooleanProperty showNames = new SimpleBooleanProperty(true);
     /**
      * A flag for showing the radius of the SoI.
      */
-    BooleanProperty showSphereOfInfluence = new SimpleBooleanProperty(false);
+    public BooleanProperty showSphereOfInfluence = new SimpleBooleanProperty(false);
     /**
      * A flag for showing the radius of the Hill Sphere.
      */
-    BooleanProperty showHillSphere = new SimpleBooleanProperty(false);
+    public BooleanProperty showHillSphere = new SimpleBooleanProperty(false);
     /**
      * A flag for showing a vector tangent to the current orbit position.
      */
-    BooleanProperty showTangentVector = new SimpleBooleanProperty(false);
+    public BooleanProperty showTangentVector = new SimpleBooleanProperty(false);
     /**
      * A flag for showing markers of important points of the orbit.
      */
-    BooleanProperty showMarkers = new SimpleBooleanProperty(false);
+    public BooleanProperty showMarkers = new SimpleBooleanProperty(false);
     //endregion
 
     /**
@@ -64,12 +65,12 @@ public class SpaceCanvas extends Canvas {
      */
     private Astrarium astrarium;
 
+    //region Visual properties
     /**
      * A ratio that represents the scale of the map.
      */
     private double zoom = 5e-10;
 
-    //region Visual properties
     /**
      * The offset that indicates the center of the map, that allows it to be panned when changed.
      */
@@ -133,7 +134,7 @@ public class SpaceCanvas extends Canvas {
      *
      * @param time Unix timestamp in milliseconds.
      */
-    void draw(long time) {
+    public void draw(long time) {
         setTime(time);
         draw();
     }
@@ -491,7 +492,7 @@ public class SpaceCanvas extends Canvas {
      *
      * @param position {@link Position} to be at the center of the map.
      */
-    void setOffset(Position position) {
+    public void setOffset(Position position) {
         setOffset(position.getX(), position.getY());
     }
 

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?import fx.SpaceCanvas?>
+<?import fx.components.SpaceCanvas?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Text?>
@@ -76,6 +76,5 @@
             <SpaceCanvas fx:id="canvas"/>
         </Pane>
     </HBox>
-
 
 </VBox>
