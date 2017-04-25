@@ -1,11 +1,11 @@
 package fx.modals;
 
+import fx.Main;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Modality;
@@ -32,7 +32,7 @@ public abstract class Modal<T> extends Stage {
         this.setTitle(getModalTitle());
         this.initModality(Modality.APPLICATION_MODAL);
         this.setResizable(false);
-        this.getIcons().add(new Image("icons/favicon-60.png"));
+        this.getIcons().add(Main.getIcon());
 
         this.setScene(new Scene(initialise()));
 

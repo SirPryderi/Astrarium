@@ -27,6 +27,15 @@ public class Main extends Application {
         launch(args);
     }
 
+    /**
+     * Returns the default icon.
+     *
+     * @return default icon.
+     */
+    public static Image getIcon() {
+        return new Image("icons/favicon-60.png");
+    }
+
     @Override
     public void start(Stage primaryStage) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("Main.fxml"));
@@ -34,7 +43,7 @@ public class Main extends Application {
         primaryStage.setScene(scene);
 
         primaryStage.setTitle("Astrarium - Mission Planner");
-        primaryStage.getIcons().add(new Image("icons/favicon-60.png"));
+        primaryStage.getIcons().add(getIcon());
 
         primaryStage.show();
     }

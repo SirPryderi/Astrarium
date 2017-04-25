@@ -4,6 +4,7 @@ import astrarium.Astrarium;
 import astrarium.CelestialBody;
 import astrarium.Orbit;
 import astrarium.utils.Vector;
+import com.google.gson.JsonParseException;
 import fx.components.SpaceCanvas;
 import fx.modals.BodyModal;
 import fx.modals.Modal;
@@ -16,6 +17,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import javafx.stage.Window;
 import org.jetbrains.annotations.NotNull;
 
@@ -106,9 +108,8 @@ public class MainController {
     public MainController() {
         try {
             astrarium = JsonHub.importDefaultMap("SolSystem");
-        } catch (IOException e) {
-            System.err.println("Failed to load default map.");
-            e.printStackTrace();
+        } catch (Exception e) {
+            dialogError("Default map error", "The program failed to load the default map, and will now quit.");
             System.exit(-1);
         }
     }
@@ -277,7 +278,14 @@ public class MainController {
 
                 currentFile = file;
             } catch (IOException e) {
-                e.printStackTrace();
+                dialogError("Load failed",
+                        "The program failed to load the file because of an I/O exception.");
+            } catch (JsonParseException e) {
+                dialogError("Parsing failed",
+                        "The program failed to load the file because the specified file was not a valid Astrarium save.");
+            } catch (Exception e) {
+                dialogError("Unknown Error",
+                        String.format("The program encountered an unknown error while saving the file. Exception details: %s.", e.getClass()));
             }
 
         canvasAnimationTimer.start();
@@ -318,7 +326,7 @@ public class MainController {
                 JsonHub.exportJson(file, astrarium);
                 currentFile = file;
             } catch (IOException e) {
-                e.printStackTrace();
+                dialogError("Save failed", "The program was unable to save the file.");
             }
         else
             saveAsFile();
@@ -365,6 +373,26 @@ public class MainController {
         orbit.initOwner(canvas.getScene().getWindow());
         orbit.showAndWait();
         orbit.getResult();
+    }
+    //endregion
+
+    //region Dialogs
+
+    /**
+     * Makes a default error dialog.
+     *
+     * @param headerText  title of the error dialog.
+     * @param contentText body of the error dialog.
+     */
+    private void dialogError(String headerText, String contentText) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        Stage scene = (Stage) alert.getDialogPane().getScene().getWindow();
+        scene.getIcons().add(Main.getIcon());
+        alert.setTitle("Error");
+        alert.setHeaderText(headerText);
+        alert.setContentText(contentText);
+
+        alert.showAndWait();
     }
     //endregion
 
