@@ -99,6 +99,7 @@ public class Vector {
      *
      * @return unit vector.
      */
+    @SuppressWarnings("WeakerAccess")
     public Vector getNormalisedVector() {
         Vector norm = this.getCopy();
 
@@ -409,6 +410,39 @@ public class Vector {
         this.y = vector.y;
         this.z = vector.z;
     }
+    //endregion
+
+    //region Equals
+
+    /**
+     * Compares two vector with the default precision {@link Mathematics#EPSILON}.
+     *
+     * @param vector the other vector to compare.
+     * @return {@code true} if their difference is less than EPSILON, {@code false} otherwise.
+     */
+    public boolean equals(Vector vector) {
+        return equals(vector, Mathematics.EPSILON);
+    }
+
+    /**
+     * Compares two vector with the precision {@code epsilon}.
+     *
+     * @param vector  the other vector to compare.
+     * @param epsilon the precision of the comparison.
+     * @return {@code true} if their difference is less than {@code epsilon}, {@code false} otherwise.
+     */
+    public boolean equals(Vector vector, double epsilon) {
+        return Mathematics.equals(this.x, vector.x, epsilon) &&
+                Mathematics.equals(this.y, vector.y, epsilon) &&
+                Mathematics.equals(this.z, vector.z, epsilon);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        // That's pretty subtle!
+        return obj instanceof Vector && equals((Vector) obj);
+    }
+
     //endregion
 
     /**
