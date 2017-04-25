@@ -171,7 +171,7 @@ public abstract class Body {
      * @return orbit at rendered time.
      */
     @Nullable
-    abstract Orbit getOrbit();
+    public abstract Orbit getOrbit();
 
     /**
      * Returns the orbit at the time specified.
@@ -184,5 +184,5 @@ public abstract class Body {
      * @return orbit at the given time
      */
     @Nullable
-    abstract Orbit getOrbitAtTime(long time);
+    public abstract Orbit getOrbitAtTime(long time);
 }

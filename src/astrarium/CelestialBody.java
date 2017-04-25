@@ -95,7 +95,7 @@ public class CelestialBody extends Body {
     }
 
     @Override
-    Orbit getOrbitAtTime(long time) {
+    public Orbit getOrbitAtTime(long time) {
         return getOrbit();
     }
 
@@ -119,7 +119,7 @@ public class CelestialBody extends Body {
      * @param radius in meters from the center of mass of the body.
      * @return the escape velocity in m/s.
      */
-    public double getEscapeVelocity(Double radius) {
+    public double getEscapeVelocity(double radius) {
         return Math.sqrt(2 * getStandardGravitationalParameter() / radius);
     }
 

@@ -33,14 +33,14 @@ public class Spacecraft extends Body {
 
     @Override
     @NotNull
-    Orbit getOrbit() {
+    public Orbit getOrbit() {
         // todo
         return null;
     }
 
     @Override
     @NotNull
-    Orbit getOrbitAtTime(long time) {
+    public Orbit getOrbitAtTime(long time) {
         // todo
         return null;
     }
