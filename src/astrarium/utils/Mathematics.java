@@ -24,6 +24,11 @@ public final class Mathematics {
     public final static double THREE_HALVES_PI = 4.71238898038469;
 
     /**
+     * Default precision to compare two doubles.
+     */
+    final static double EPSILON = 1E-5;
+
+    /**
      * Makes the class non-instantiable.
      */
     private Mathematics() {
@@ -95,6 +100,6 @@ public final class Mathematics {
      * @return true if their difference is less then 1E-5, false otherwise.
      */
     public static boolean equals(double a, double b) {
-        return equals(a, b, 1E-5);
+        return equals(a, b, EPSILON);
     }
 }
