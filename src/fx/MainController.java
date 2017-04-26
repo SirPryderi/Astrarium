@@ -9,6 +9,7 @@ import fx.components.SpaceCanvas;
 import fx.modals.BodyModal;
 import fx.modals.Modal;
 import fx.modals.SpacecraftModal;
+import fx.modals.TransferModal;
 import io.JsonHub;
 import javafx.animation.AnimationTimer;
 import javafx.application.Platform;
@@ -385,7 +386,23 @@ public class MainController {
         Modal spacecraftModal = new SpacecraftModal();
         spacecraftModal.initOwner(canvas.getScene().getWindow());
         spacecraftModal.showAndWait();
-        System.out.println(spacecraftModal.getResult());
+
+        try {
+            System.out.println(spacecraftModal.getResult());
+        } catch (Exception e) {
+            dialogError("Oopsie!", "Something went wrong.");
+        }
+    }
+
+    /**
+     * Opens a pop-up to create a new transfer.
+     */
+    @FXML
+    public void newTransfer() {
+        TransferModal modal = new TransferModal();
+        modal.initOwner(canvas.getScene().getWindow());
+        modal.showAndWait();
+        modal.getResult();
     }
     //endregion
 

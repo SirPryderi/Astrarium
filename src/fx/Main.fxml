@@ -22,7 +22,7 @@
             <MenuItem text="Preferences..." disable="true"/>
         </Menu>
         <Menu text="Mission">
-            <MenuItem text="New..." accelerator="Shortcut+N" disable="true"/>
+            <MenuItem text="New..." accelerator="Shortcut+N" onAction="#newTransfer"/>
         </Menu>
         <Menu text="View">
             <CheckMenuItem text="Show orbit" accelerator="ALT+O"/>
