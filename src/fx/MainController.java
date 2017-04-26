@@ -8,6 +8,7 @@ import com.google.gson.JsonParseException;
 import fx.components.SpaceCanvas;
 import fx.modals.BodyModal;
 import fx.modals.Modal;
+import fx.modals.SpacecraftModal;
 import io.JsonHub;
 import javafx.animation.AnimationTimer;
 import javafx.application.Platform;
@@ -374,6 +375,17 @@ public class MainController {
         orbit.initOwner(canvas.getScene().getWindow());
         orbit.showAndWait();
         orbit.getResult();
+    }
+
+    /**
+     * Opens a pop-up to create a new spacecraft.
+     */
+    @FXML
+    public void newSpacecraft() {
+        Modal spacecraftModal = new SpacecraftModal();
+        spacecraftModal.initOwner(canvas.getScene().getWindow());
+        spacecraftModal.showAndWait();
+        System.out.println(spacecraftModal.getResult());
     }
     //endregion
 

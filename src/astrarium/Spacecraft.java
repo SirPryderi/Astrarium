@@ -44,4 +44,10 @@ public class Spacecraft extends Body {
         // todo
         return null;
     }
+
+    @Override
+    public String toString() {
+        // TODO
+        return getName() + " orbiting around [NOT IMPLEMENTED]";
+    }
 }

@@ -17,7 +17,7 @@
         </Menu>
         <Menu text="Edit">
             <MenuItem text="Add Body..." onAction="#newBody"/>
-            <MenuItem text="Add Spacecraft..." disable="true"/>
+            <MenuItem text="Add Spacecraft..." onAction="#newSpacecraft"/>
             <SeparatorMenuItem/>
             <MenuItem text="Preferences..." disable="true"/>
         </Menu>
