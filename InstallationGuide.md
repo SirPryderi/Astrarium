@@ -44,9 +44,9 @@ Original guide from [DigitalOcean](https://www.digitalocean.com/community/tutori
         
 * Test if everything worked with:
         
-        javac -v
+        javac -version
         
-    that should return something like `javac 1.8.0_111`.
+    that should return something like `javac 1.8.0_131`.
     
 * Exit from the root session.
 
@@ -56,6 +56,6 @@ Original guide from [DigitalOcean](https://www.digitalocean.com/community/tutori
 
 * Run it with:
 
-        javac -jar Astrarium.jar
+        java -jar Astrarium.jar
         
 * Another happy Linux user!
