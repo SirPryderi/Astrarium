@@ -30,6 +30,7 @@ import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.List;
 import java.util.Random;
 
 import static astrarium.utils.Mathematics.TWO_PI;
@@ -207,21 +208,53 @@ public class MainController {
 
             Vector velocity = body.getCircularOrbitVelocity(position);
 
-            Vector axis = new Vector(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5);
-//
-            double angle = random() * TWO_PI;
-//
-            velocity.rotate(axis, angle);
+            //region Randomize Velocity
+            // 0: No rotation
+            // 1: Simple 2D rotation
+            // 2: Full 3D rotation
+            final double rotation = 0;
 
-            velocity.rotateZ(angle);
+            //noinspection ConstantConditions
+            if (rotation != 0) {
+                // random rotation amount
+                double angle = random() * TWO_PI;
 
-            Orbit orbit = Orbit.calculateOrbitFromPositionAndVelocity(astrarium.getRoot(), position, velocity, canvas.getTime());
+                //noinspection ConstantConditions
+                if (rotation == 1) {
+                    // rotates over the z axis
+                    velocity.rotateZ(angle);
+                } else {
+                    // creates a random rotation axis
+                    Vector axis = new Vector(random() - 0.5, random() - 0.5, random() - 0.5);
+
+                    // rotates the velocity on the random axis of the random amount
+                    velocity.rotate(axis, angle);
+                }
+            }
+            //endregion
+
+            Orbit orbit = Orbit.calculateOrbitFromPositionAndVelocity(
+                    astrarium.getRoot(), position, velocity, canvas.getTime());
+
+            //region Click collision
+
+            List<CelestialBody> allChildren = astrarium.getRoot().getAllChildren();
+
+            allChildren.add(0, astrarium.getRoot());
+
+            allChildren.forEach((child) -> {
+                if (position.isInsideRadius2D(child.getPosition(), child.getRadius())) {
+                    dialogInformation(child.getName(),
+                            String.format("Mass: %e kg\nRadius: %e km\nParent: %s",
+                                    child.getMass(), child.getRadius() / 1000, child.getParent())
+                    );
+                }
+            });
+            //endregion
 
             new CelestialBody(String.valueOf(new Random().nextInt(100)), 0, 2e5, orbit);
 
             initNavigationTree();
-
-            System.out.println(orbit);
         });
 
         canvas.setTime(time);
@@ -390,7 +423,7 @@ public class MainController {
         try {
             System.out.println(spacecraftModal.getResult());
         } catch (Exception e) {
-            dialogError("Oopsie!", "Something went wrong.");
+            dialogError("Oops!", "Something went wrong.");
         }
     }
 
@@ -409,20 +442,42 @@ public class MainController {
     //region Dialogs
 
     /**
+     * Creates a generic dialog.
+     *
+     * @param headerText  upper text of the dialog.
+     * @param contentText body of the dialog.
+     * @param title       title of the window.
+     * @param type        type of dialog.
+     */
+    private void dialogGeneric(String headerText, String contentText, String title, Alert.AlertType type) {
+        Alert alert = new Alert(type);
+        Stage scene = (Stage) alert.getDialogPane().getScene().getWindow();
+        scene.getIcons().add(Main.getIcon());
+        alert.setTitle(title);
+        alert.setHeaderText(headerText);
+        alert.setContentText(contentText);
+
+        alert.showAndWait();
+    }
+
+    /**
      * Makes a default error dialog.
      *
      * @param headerText  title of the error dialog.
      * @param contentText body of the error dialog.
      */
     private void dialogError(String headerText, String contentText) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        Stage scene = (Stage) alert.getDialogPane().getScene().getWindow();
-        scene.getIcons().add(Main.getIcon());
-        alert.setTitle("Error");
-        alert.setHeaderText(headerText);
-        alert.setContentText(contentText);
+        dialogGeneric(headerText, contentText, "Error", Alert.AlertType.ERROR);
+    }
 
-        alert.showAndWait();
+    /**
+     * Makes a default information dialog.
+     *
+     * @param headerText  title of the information dialog.
+     * @param contentText body of the information dialog.
+     */
+    private void dialogInformation(String headerText, String contentText) {
+        dialogGeneric(headerText, contentText, headerText, Alert.AlertType.INFORMATION);
     }
     //endregion
 
