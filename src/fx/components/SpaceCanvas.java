@@ -583,7 +583,7 @@ public class SpaceCanvas extends Canvas {
      * @return the converted position.
      */
     private Position toUniversalCoordinate(Position position) {
-        return (Position) position.getCopy().divided(zoom);
+        return (Position) position.getCopy().minus(offset).divided(zoom);
     }
 
     @Override
