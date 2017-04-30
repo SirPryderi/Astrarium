@@ -487,6 +487,23 @@ public class Vector {
         return vector.minus(c).getMagnitudeSquared() <= radius * radius;
     }
 
+    /**
+     * Analogous to {@link #isInsideRadius(Vector, double)}, but projects the points in the horizontal plane first.
+     *
+     * @param c      center of the sphere.
+     * @param radius radius of the sphere.
+     * @return {@code true} if the point in inside the sphere volume, {@code false} otherwise.
+     */
+    public boolean isInsideRadius2D(Vector c, double radius) {
+        Vector vector = this.getCopy();
+        Vector c2 = c.getCopy();
+
+        vector.setZ(0);
+        c2.setZ(0);
+
+        return vector.isInsideRadius(c2, radius);
+    }
+
     @Override
     public String toString() {
         return String.format("<%f, %f, %f>", this.getX(), this.getY(), this.getZ());
