@@ -474,6 +474,19 @@ public class Vector {
         return new Matrix(new double[][]{{x}, {y}, {z}});
     }
 
+    /**
+     * Checks if the current position is inside the sphere centered in {@code c} with radius {@code radius}.
+     *
+     * @param c      center of the sphere.
+     * @param radius radius of the sphere.
+     * @return {@code true} if the point in inside the sphere volume, {@code false} otherwise.
+     */
+    public boolean isInsideRadius(Vector c, double radius) {
+        Vector vector = this.getCopy();
+
+        return vector.minus(c).getMagnitudeSquared() <= radius * radius;
+    }
+
     @Override
     public String toString() {
         return String.format("<%f, %f, %f>", this.getX(), this.getY(), this.getZ());

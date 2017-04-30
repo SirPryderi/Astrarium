@@ -1,5 +1,6 @@
 import astrarium.utils.Mathematics;
 import astrarium.utils.Matrix;
+import astrarium.utils.Position;
 import astrarium.utils.Vector;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -17,6 +18,53 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  */
 @SuppressWarnings("JavaDoc")
 class VectorTest {
+    @Test
+    void isInsideRadius() {
+        Position v = new Position(0, 0, 0);
+
+        Assertions.assertTrue(v.isInsideRadius(v, 1));
+    }
+
+    @Test
+    void isInsideRadius2() {
+        Position v = new Position(2, 0, 0);
+        Position c = new Position(0, 0, 0);
+
+        Assertions.assertFalse(v.isInsideRadius(c, 1));
+    }
+
+    @Test
+    void isInsideRadius3() {
+        Position v = new Position(1, 0, 0);
+        Position c = new Position(0, 0, 0);
+
+        Assertions.assertTrue(v.isInsideRadius(c, 1));
+    }
+
+    @Test
+    void isInsideRadius4() {
+        Position v = new Position(1, 0, 0);
+        Position c = new Position(1, 1, 0);
+
+        Assertions.assertTrue(v.isInsideRadius(c, 1));
+    }
+
+    @Test
+    void isInsideRadius5() {
+        Position v = new Position(1.1, 0, 0);
+        Position c = new Position(1, 1, 0);
+
+        Assertions.assertFalse(v.isInsideRadius(c, 1));
+    }
+
+    @Test
+    void isInsideRadius6() {
+        Position v = new Position(-1, 1, 0);
+        Position c = new Position(-2, 2, 0);
+
+        Assertions.assertTrue(v.isInsideRadius(c, 2));
+    }
+
     @Test
     void getAngleWith1() {
         Vector v1 = new Vector(1, 0, 0);
