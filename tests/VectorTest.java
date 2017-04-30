@@ -117,6 +117,7 @@ class VectorTest {
 
         Vector axis = new Vector(1, 2, 1);
 
+        //noinspection deprecation
         position1.rotateWithMatrix(axis, theta);
         position2.rotate(axis, theta);
 
