@@ -201,6 +201,10 @@ public class SpaceCanvas extends Canvas {
             drawTangentVector(celestialBody);
 
         celestialBody.getChildren().forEach(children -> {
+            //noinspection ConstantConditions
+            if (children.getOrbit().getApoapsis() * zoom <= 9)
+                return;
+
             if (showOrbit.get()) {
                 getGraphicsContext2D().setStroke(Colors.hashColor(children.getName()));
                 drawOrbit(children.getOrbit());
