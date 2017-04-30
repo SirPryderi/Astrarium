@@ -81,15 +81,9 @@ public class CelestialBody extends Body {
      * @return all the orbiting objects.
      */
     public List<CelestialBody> getAllChildren() {
-        List<CelestialBody> allChildren = getChildren();
+        List<CelestialBody> allChildren = new LinkedList<>(getChildren());
 
-        List<CelestialBody> temp = new LinkedList<>();
-
-        for (CelestialBody child : allChildren) {
-            temp.addAll(child.getAllChildren());
-        }
-
-        allChildren.addAll(temp);
+        getChildren().forEach(child -> allChildren.addAll(child.getAllChildren()));
 
         return allChildren;
     }
