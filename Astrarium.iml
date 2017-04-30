@@ -23,8 +23,8 @@
     <orderEntry type="module-library" scope="TEST">
       <library name="JUnit5">
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/lib/junit-jupiter-api-5.0.0-M3.jar!/" />
-          <root url="jar://$MODULE_DIR$/lib/opentest4j-1.0.0-M1.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/junit-jupiter-api-5.0.0-M4.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/opentest4j-1.0.0-M2.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
