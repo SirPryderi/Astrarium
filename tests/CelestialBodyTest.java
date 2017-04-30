@@ -3,12 +3,12 @@ import astrarium.CelestialBody;
 import astrarium.Orbit;
 import astrarium.utils.Position;
 import io.JsonHub;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
+import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Created on 01/03/2017.
@@ -24,6 +24,24 @@ class CelestialBodyTest {
     }
 
     @Test
+    void getAllChildren() {
+        CelestialBody first = new CelestialBody("First", 0, 0);
+
+        CelestialBody second = new CelestialBody("Second", 0, 0, new Orbit(first, 0, 0));
+
+        CelestialBody third = new CelestialBody("third", 0, 0, new Orbit(second, 0, 0));
+
+        CelestialBody fourth = new CelestialBody("fourth", 0, 0, new Orbit(third, 0, 0));
+
+        List<CelestialBody> allChildren = first.getAllChildren();
+
+        assertFalse(allChildren.contains(first));
+        assertTrue(allChildren.contains(second));
+        assertTrue(allChildren.contains(third));
+        assertTrue(allChildren.contains(fourth));
+    }
+
+    @Test
     void getChildren() {
         CelestialBody father = new CelestialBody("Father", 0, 0);
         // And why not mother? You sexist scum!
@@ -32,11 +50,11 @@ class CelestialBodyTest {
 
         father.getChildren().add(child);
 
-        Assertions.assertEquals(true, father.getChildren().contains(child));
+        assertEquals(true, father.getChildren().contains(child));
 
         father.getChildren().remove(child);
 
-        Assertions.assertEquals(false, father.getChildren().contains(child));
+        assertEquals(false, father.getChildren().contains(child));
     }
 
     @Test

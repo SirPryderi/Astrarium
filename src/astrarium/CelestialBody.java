@@ -5,6 +5,7 @@ import astrarium.utils.Vector;
 import com.sun.istack.internal.Nullable;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import static astrarium.utils.Mathematics.PI_BY_TWO;
@@ -72,6 +73,25 @@ public class CelestialBody extends Body {
      */
     public List<CelestialBody> getChildren() {
         return children;
+    }
+
+    /**
+     * Returns all the children and sub-children of the current object.
+     *
+     * @return all the orbiting objects.
+     */
+    public List<CelestialBody> getAllChildren() {
+        List<CelestialBody> allChildren = getChildren();
+
+        List<CelestialBody> temp = new LinkedList<>();
+
+        for (CelestialBody child : allChildren) {
+            temp.addAll(child.getAllChildren());
+        }
+
+        allChildren.addAll(temp);
+
+        return allChildren;
     }
 
     /**
