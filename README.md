@@ -6,23 +6,23 @@
 # Astrarium
 🚀 A Java application capable of calculating the launch windows for interplanetary travel. 🛰
 
-# Developmet
+# Development
 Astrarium is still in a pre-alpha phase, and only features the computation of planetary positions. Stay tuned for new features!
 
-## Roadamap
+## Roadmap
 - [x] User interface
 - [x] Compute planets position
 - [ ] Compute spacecraft motion
 - [ ] Patched conic approximation
 - [ ] Plot simple orbital transfer
 - [ ] Plot interplanetary transfer
-- [ ] KSP savefile integration
+- [ ] KSP save files integration
 - [ ] Gravity assist
-- [ ] Aerobreaking
+- [ ] Aerobraking
 
 # Installation
 ## Download
-You can download the lastest `.jar` here <https://github.com/SirPryderi/Astrarium/releases/latest>
+You can download the latest `.jar` here <https://github.com/SirPryderi/Astrarium/releases/latest>
 
 ## Installation Guide
 Check out the [Installation Guide](InstallationGuide.md) if you are having trouble running Astrarium!
