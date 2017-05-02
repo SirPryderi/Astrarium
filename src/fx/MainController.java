@@ -409,6 +409,7 @@ public class MainController {
         orbit.initOwner(canvas.getScene().getWindow());
         orbit.showAndWait();
         orbit.getResult();
+        initNavigationTree();
     }
 
     /**
