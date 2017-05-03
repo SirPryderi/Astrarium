@@ -25,18 +25,38 @@ public class NumberTextField extends TextField {
      * The numeric value of the field.
      */
     private ObjectProperty<Double> number = new SimpleObjectProperty<>();
+    /**
+     * Minimum value accepted by the field.
+     */
     private double minimumValue = Double.NEGATIVE_INFINITY;
+    /**
+     * Maximum value accepted by the field.
+     */
     private double maximumValue = Double.POSITIVE_INFINITY;
 
+    /**
+     * Constructs a new {@link NumberTextField} with the default value of 0.
+     */
     public NumberTextField() {
         this(0);
     }
 
+    /**
+     * Constructs a new {@link NumberTextField} with the default {@code value}.
+     *
+     * @param value default value.
+     */
     public NumberTextField(double value) {
         this(value, DecimalFormat.getInstance());
         initHandlers();
     }
 
+    /**
+     * Constructs a new {@link NumberTextField} with the default {@code value} and a specified {@link NumberFormat}.
+     *
+     * @param value        default value.
+     * @param numberFormat the number format.
+     */
     public NumberTextField(double value, NumberFormat numberFormat) {
         super();
         this.numberFormat = numberFormat;
@@ -45,6 +65,13 @@ public class NumberTextField extends TextField {
         setValue(value);
     }
 
+    /**
+     * Constructs a new {@link NumberTextField} with the default {@code value} and a specified {@code minimumValue} and {@code maximumValue}.
+     *
+     * @param value        default value.
+     * @param minimumValue min value.
+     * @param maximumValue max value.
+     */
     public NumberTextField(double value, double minimumValue, double maximumValue) {
         this(value);
 
@@ -52,34 +79,76 @@ public class NumberTextField extends TextField {
         setMaximumValue(maximumValue);
     }
 
+    /**
+     * Returns the minimum allowed value of the field.
+     *
+     * @return the minimum allowed value.
+     */
+    @SuppressWarnings("unused")
     public double getMinimumValue() {
         return minimumValue;
     }
 
+    /**
+     * Sets the minimum allowed value of the field.
+     *
+     * @param minimumValue the minimum allowed value.
+     */
+    @SuppressWarnings("WeakerAccess")
     public void setMinimumValue(double minimumValue) {
         this.minimumValue = minimumValue;
     }
 
+    /**
+     * Returns the maximum allowed value of the field.
+     *
+     * @return the maximum allowed value.
+     */
+    @SuppressWarnings("unused")
     public double getMaximumValue() {
         return maximumValue;
     }
 
+    /**
+     * Sets the maximum allowed value of the field.
+     *
+     * @param maximumValue the maximum allowed value.
+     */
+    @SuppressWarnings("WeakerAccess")
     public void setMaximumValue(double maximumValue) {
         this.maximumValue = maximumValue;
     }
 
+    /**
+     * Returns the value of the field.
+     *
+     * @return field's value.
+     */
     public final double getNumber() {
         return number.get();
     }
 
+    /**
+     * Sets the value of the field.
+     *
+     * @param value values of the field.
+     */
     public final void setNumber(double value) {
         number.set(value);
     }
 
-    public ObjectProperty<Double> numberProperty() {
+    /**
+     * Returns the number property of the field.
+     *
+     * @return number property.
+     */
+    private ObjectProperty<Double> numberProperty() {
         return number;
     }
 
+    /**
+     * Initialises event handlers.
+     */
     private void initHandlers() {
 
         // try to parse when focus is lost or RETURN is hit
@@ -95,6 +164,11 @@ public class NumberTextField extends TextField {
         numberProperty().addListener((observable, oldValue, newValue) -> setText(numberFormat.format(newValue)));
     }
 
+    /**
+     * Sets the value of the field.
+     *
+     * @param value new value.
+     */
     public void setValue(double value) {
         setText(numberFormat.format(value));
         this.number.setValue(value);

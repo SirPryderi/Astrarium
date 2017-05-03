@@ -14,7 +14,7 @@ import java.util.Random;
 @SuppressWarnings("WeakerAccess")
 final public class Colors {
     /**
-     * Prevents the class from being instantiated
+     * Prevents the class from being instantiated.
      */
     private Colors() {
     }

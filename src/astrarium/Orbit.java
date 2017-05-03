@@ -537,7 +537,12 @@ public final class Orbit {
         }
     }
 
-
+    /**
+     * Returns the {@code Velocity {@link Vector}} at a given true anomaly {@code theta}.
+     *
+     * @param theta true anomaly to get the velocity at.
+     * @return the velocity vector.
+     */
     public Vector getVelocityAtAtAngle(double theta) {
 //        Vector velocity = Vector.getDirectionVector(getTangentAngleFromRadius());
 //

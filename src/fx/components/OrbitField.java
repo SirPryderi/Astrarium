@@ -6,11 +6,15 @@ import javafx.scene.control.ComboBoxBase;
 import javafx.scene.control.Skin;
 
 /**
+ * A node to add a new orbit.
  * Created on 11/04/2017.
  *
  * @author Vittorio
  */
 public class OrbitField extends ComboBoxBase<Orbit> {
+    /**
+     * Constructor for OrbitField.
+     */
     public OrbitField() {
         //getStyleClass().add("date-picker");
         setEditable(true);

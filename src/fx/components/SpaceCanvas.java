@@ -244,7 +244,13 @@ public class SpaceCanvas extends Canvas {
             drawOrbitAltCached(orbit);
     }
 
+    /**
+     * Old method to draw an ellipse from a {@link Orbit}.
+     *
+     * @param orbit to draw.
+     */
     @Deprecated
+    @SuppressWarnings("unused")
     private void drawEllipse(Orbit orbit) {
         getGraphicsContext2D().save();
 
@@ -275,10 +281,21 @@ public class SpaceCanvas extends Canvas {
         getGraphicsContext2D().restore();
     }
 
+    /**
+     * Draws a line from {@code p1} to {@code p2}.
+     *
+     * @param p1 first point of the segment.
+     * @param p2 second point of the segment.
+     */
     private void drawLine(Position p1, Position p2) {
         getGraphicsContext2D().strokeLine(p1.getX() * zoom, p1.getY() * zoom, p2.getX() * zoom, p2.getY() * zoom);
     }
 
+    /**
+     * Method to draw an elliptical equatorial orbit.
+     *
+     * @param orbit to draw.
+     */
     private void overlyOptimisticDrawOrbit(Orbit orbit) {
         getGraphicsContext2D().save();
 
@@ -292,7 +309,13 @@ public class SpaceCanvas extends Canvas {
         getGraphicsContext2D().restore();
     }
 
+    /**
+     * Draws an orbit evaluating each point in the period.
+     *
+     * @param orbit to draw.
+     */
     @Deprecated
+    @SuppressWarnings({"unused", "DeprecatedIsStillUsed"})
     private void drawOrbitAlt(Orbit orbit) {
         final double epsilon = 0.01;
 
@@ -315,6 +338,11 @@ public class SpaceCanvas extends Canvas {
         getGraphicsContext2D().closePath();
     }
 
+    /**
+     * Optimised version of {@link #drawOrbitAlt(Orbit)} that keeps a cache of the values to improve performances.
+     *
+     * @param orbit to draw.
+     */
     private void drawOrbitAltCached(Orbit orbit) {
         if (!orbitsCache.containsKey(orbit))
             createOrbitCache(orbit);
@@ -335,6 +363,11 @@ public class SpaceCanvas extends Canvas {
         getGraphicsContext2D().closePath();
     }
 
+    /**
+     * Stores the given {@code orbit} in the cache.
+     *
+     * @param orbit to cache.
+     */
     private void createOrbitCache(Orbit orbit) {
         final int count = 4096;
 
@@ -352,10 +385,20 @@ public class SpaceCanvas extends Canvas {
         this.orbitsCache.put(orbit, ps);
     }
 
+    /**
+     * Issues the command to move the path to the given position {@code p}.
+     *
+     * @param p the position to move to.
+     */
     private void moveTo(Vector p) {
         getGraphicsContext2D().moveTo(p.getX(), p.getY());
     }
 
+    /**
+     * Issues the command to draw a line to the given position {@code p}.
+     *
+     * @param p the position to draw a line to.
+     */
     private void lineTo(Vector p) {
         getGraphicsContext2D().lineTo(p.getX(), p.getY());
     }
@@ -367,6 +410,7 @@ public class SpaceCanvas extends Canvas {
      * @param name     name of the marker.
      * @param color    color of the marker.
      */
+    @SuppressWarnings("unused")
     private void drawMarker(Position position, String name, Color color) {
         drawMarker(position, name, color, 3);
     }

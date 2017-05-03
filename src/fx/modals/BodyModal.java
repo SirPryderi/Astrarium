@@ -15,9 +15,21 @@ import org.jetbrains.annotations.Nullable;
  * @author Vittorio
  */
 public class BodyModal extends Modal<CelestialBody> {
+    /**
+     * The field containing the name of the Celestial Body.
+     */
     private TextField nameField;
+    /**
+     * The field containing the mass of the Celestial Body.
+     */
     private NumberTextField massField;
+    /**
+     * The field containing the equatorial of the Celestial Body.
+     */
     private NumberTextField radiusField;
+    /**
+     * The field containing the orbit of the Celestial Body.
+     */
     private OrbitField orbitField;
 
 

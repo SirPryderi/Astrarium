@@ -14,8 +14,14 @@ import javafx.scene.control.TextField;
  * @author Vittorio
  */
 public class OrbitFieldSkin extends ComboBoxBaseSkin<Orbit> {
+    /**
+     * The orbit field.
+     */
     private final OrbitField field;
 
+    /**
+     * {@inheritDoc}
+     */
     public OrbitFieldSkin(ComboBoxBase<Orbit> comboBox, ComboBoxBaseBehavior<Orbit> behavior) {
         super(comboBox, behavior);
         field = (OrbitField) comboBox;
