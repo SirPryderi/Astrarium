@@ -155,7 +155,20 @@ public class MainController {
         navigationTree.setOnMouseClicked(event -> {
             TreeItem<CelestialBody> item = navigationTree.getSelectionModel().getSelectedItem();
 
-            canvas.setOffset(item.getValue().getPosition());
+            if (item == null)
+                return;
+
+            switch (event.getButton()) {
+                case PRIMARY:
+                    canvas.setOffset(item.getValue().getPosition());
+                    break;
+                case SECONDARY:
+                    final ContextMenu contextMenu = new ContextMenu();
+                    MenuItem name = new MenuItem(item.getValue().toString());
+                    contextMenu.getItems().addAll(name, new SeparatorMenuItem(), new MenuItem("Test contextual menu"));
+                    navigationTree.setContextMenu(contextMenu);
+                    break;
+            }
         });
     }
 
