@@ -18,6 +18,7 @@ import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.Window;
@@ -156,6 +157,9 @@ public class MainController {
             TreeItem<CelestialBody> item = navigationTree.getSelectionModel().getSelectedItem();
 
             if (item == null)
+                return;
+
+            if (event.getPickResult().getIntersectedNode() instanceof StackPane)
                 return;
 
             switch (event.getButton()) {
