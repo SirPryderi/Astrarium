@@ -16,6 +16,8 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
@@ -24,9 +26,12 @@ import javafx.stage.Stage;
 import javafx.stage.Window;
 import org.jetbrains.annotations.NotNull;
 
+import java.awt.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -454,6 +459,39 @@ public class MainController {
         modal.initOwner(canvas.getScene().getWindow());
         modal.showAndWait();
         modal.getResult();
+    }
+
+    /**
+     * Opens the help web page.
+     */
+    @FXML
+    public void openHelp() {
+        openWebPage("https://github.com/SirPryderi/Astrarium/blob/master/UserGuide.md");
+    }
+
+    /**
+     * Opens the help web page.
+     */
+    @FXML
+    public void bugReport() {
+        openWebPage("https://github.com/SirPryderi/Astrarium/issues");
+    }
+
+    /**
+     * Opens the {@code url} in the default browser.
+     *
+     * @param url to open.
+     */
+    private void openWebPage(String url) {
+        if (Desktop.isDesktopSupported()) {
+            try {
+                Desktop.getDesktop().browse(new URI(url));
+            } catch (IOException e) {
+                dialogError("I/O Exception", "An I/O exception happened while opening the web page.");
+            } catch (URISyntaxException e) {
+                dialogError("Invalid URL", "The given URL was not valid.");
+            }
+        }
     }
     //endregion
 

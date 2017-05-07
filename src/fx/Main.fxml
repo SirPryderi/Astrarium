@@ -32,6 +32,10 @@
             <CheckMenuItem text="Show Velocity Vector" accelerator="ALT+V"/>
             <CheckMenuItem text="Show Markers" accelerator="ALT+M"/>
         </Menu>
+        <Menu text="Help">
+            <MenuItem text="Online manual" onAction="#openHelp" accelerator="F1"/>
+            <MenuItem text="Report a bug" onAction="#bugReport" accelerator="F2"/>
+        </Menu>
     </MenuBar>
 
     <HBox fx:id="grid" VBox.vgrow="ALWAYS">
